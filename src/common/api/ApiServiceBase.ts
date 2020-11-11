@@ -76,6 +76,7 @@ export abstract class ApiServiceBase {
     return this.createResponseFromAxios<Response>(promise);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   private isApiResponseType<Response extends IData<AnyObject>>(
     response: Response,
   ): boolean {

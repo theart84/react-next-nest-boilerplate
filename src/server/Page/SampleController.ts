@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 
 import { ISampleResponse } from '@common/dto/pages/ISampleResponse';
-import { Page } from '@server/page/decorators/Page';
+import { Page } from '@server/Page/decorators/Page';
 import { ISampleTestResponse } from '@common/dto/pages/ISampleTestResponse';
 import { Pages } from '@common/enums/Pages';
 

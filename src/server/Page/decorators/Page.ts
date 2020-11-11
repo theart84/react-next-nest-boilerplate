@@ -1,7 +1,7 @@
 import { UseInterceptors } from '@nestjs/common';
 
-import { FormatResponse } from '@server/page/interceptors/FormatResponse';
-import { GetPageWithApi } from '@server/page/decorators/GetPageWithApi';
+import { FormatResponse } from '@server/Page/interceptors/FormatResponse';
+import { GetPageWithApi } from '@server/Page/decorators/GetPageWithApi';
 import { Pages } from '@common/enums/Pages';
 import { getPageRoute } from '@common/pages/utils/getPageRoutes';
 

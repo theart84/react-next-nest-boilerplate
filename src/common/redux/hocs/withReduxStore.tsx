@@ -9,6 +9,13 @@ import { INextPageContext } from '@common/pages/types/INextPageContext';
 const isServer = typeof window === 'undefined';
 const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__';
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface Window {
+    __NEXT_REDUX_STORE__?: EnhancedStore<IRootState>;
+  }
+}
+
 const getOrCreateStore = (
   initialState?: IRootState,
 ): EnhancedStore<IRootState> => {

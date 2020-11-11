@@ -96,11 +96,11 @@
       {
         "groups": [
           [
-            "external"
+            "external",
+            "builtin"
           ],
           [
             "index",
-            "builtin",
             "sibling",
             "internal",
             "parent"
@@ -165,7 +165,8 @@
           "context"
         ]
       }
-    ]
+    ],
+    "no-void": ["error", { "allowAsStatement": true }]
   },
   "overrides": [{
     "env": {
