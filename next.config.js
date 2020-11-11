@@ -1,32 +1,40 @@
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const path = require('path');
 const Dotenv = require('dotenv-webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
-/*
-Eslint plugin не используется, так как сильно замедляет сборку
-
-Eslint loader не используется, так как deprecated
-
-ForkTsChecker plugin не используется из-за бага,
-при котором проверка типов происходит дважды
-
-В dev-режиме проверкой типов и линтингом занимается IDE
-
-В prod-режиме доступна только проверка типов
- */
 module.exports = {
-  webpack: (config) => {
+  webpack: (config, options) => {
+    const { dev, isServer } = options;
+
     config.plugins.push(new CircularDependencyPlugin({
       exclude: /node_modules/,
     }));
 
     /*
-    Данный плагин заменяет вхождения process.env.NAME на константное значение
-    в процессе сборки
-    Динамически получить доступ через process.env[key]) не получится
-    Таким образом, в клиентский JS не попадают ненужные переменные окружения
+      Since next.js checks types out of the box only in prod mode, we include this plugin.
+      Type checking and linting happens in a separate thread from the build.
      */
-    config.plugins.push(new Dotenv());
+    if (dev && isServer) {
+      config.plugins.push(
+        new ForkTsCheckerWebpackPlugin({
+          eslint: {
+            enabled: true,
+            files: './src/**/*.{ts,tsx}',
+          },
+        }),
+      );
+    }
+
+    /*
+      This plugin replaces occurrences of process.env.NAME with a constant value during the build process.
+      Dynamically accessing via process.env [key] will fail
+      Thus, unnecessary environment variables do not get into client JS.
+     */
+    config.plugins.push(new Dotenv({
+      path: path.resolve(__dirname, '../.env'),
+    }));
 
     return config;
-  }
+  },
 };

@@ -3,12 +3,12 @@ const moduleNameMapper = require('tsconfig-paths-jest')(tsconfig);
 
 module.exports = {
   preset: 'ts-jest',
-  roots: ["<rootDir>/src"],
+  roots: ['<rootDir>/src'],
   transform: {
-    "^.+\\.tsx?$": "babel-jest"
+    '^.+\\.tsx?$': 'babel-jest',
   },
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleNameMapper,
   testEnvironment: 'jsdom',
-  moduleFileExtensions: ["ts", "tsx", "js"]
+  moduleFileExtensions: ['ts', 'tsx', 'js'],
 };

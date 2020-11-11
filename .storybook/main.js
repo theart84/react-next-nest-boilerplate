@@ -14,12 +14,12 @@ module.exports = {
         Remove plugin
         Remove --no-dll in package.json
        */
-      '@babel/plugin-transform-react-jsx'
-    ]
+      '@babel/plugin-transform-react-jsx',
+    ],
   }),
   webpackFinal: (config) => {
     config.resolve.plugins.push(new TsconfigPathsPlugin());
 
     return config;
-  }
+  },
 };
