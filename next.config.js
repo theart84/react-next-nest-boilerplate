@@ -34,7 +34,7 @@ module.exports = {
       Таким образом, в клиентский JS не попадают ненужные переменные окружения
      */
     config.plugins.push(new Dotenv({
-      path: path.resolve(__dirname, '../.env'),
+      path: path.resolve(__dirname, '.env'),
     }));
 
     return config;
