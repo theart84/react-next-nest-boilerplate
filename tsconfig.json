@@ -1,4 +1,7 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
@@ -36,22 +39,18 @@
       "@pages/*": [
         "src/pages/*"
       ],
-      "@app/*": [
-        "src/app/*"
-      ],
       "@components/*": [
         "src/components/*"
       ]
     },
     "allowJs": true,
-    "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "skipLibCheck": true
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

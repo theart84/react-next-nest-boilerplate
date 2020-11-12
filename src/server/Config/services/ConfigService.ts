@@ -4,7 +4,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CONFIGURATION_SERVICE_TOKEN } from '@nestjs/config/dist/config.constants';
 
 import { ConfigNames } from '@common/enums/ConfigNames';
-import { IProcessEnv } from '@common/types/IProcessEnv';
 
 @Injectable()
 export class ConfigService {
@@ -15,7 +14,7 @@ export class ConfigService {
 
   public get<ConfigName extends ConfigNames>(
     name: ConfigName,
-  ): IProcessEnv[ConfigName] {
-    return this.nestConfigService.get<IProcessEnv[ConfigName]>(name);
+  ): NodeJS.ProcessEnv[ConfigName] {
+    return this.nestConfigService.get<NodeJS.ProcessEnv[ConfigName]>(name);
   }
 }
