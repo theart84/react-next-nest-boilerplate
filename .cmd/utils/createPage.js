@@ -77,4 +77,14 @@ const addToNestModuleList = (name, file) => file.toString().replace(/(import .*\
   .replace(/(controllers: \[(.*\n)*.*)(],)/,
     `$1, ${name}Controller],`);
 
-module.exports = { createPageFile, createDtoFile, addToPageResponse, createApiServiceFile, addToApiServiceList, addToRoutesList, addPageToEnum, createNestControllerFile, addToNestModuleList };
+module.exports = {
+  createPageFile,
+  createDtoFile,
+  addToPageResponse,
+  createApiServiceFile,
+  addToApiServiceList,
+  addToRoutesList,
+  addPageToEnum,
+  createNestControllerFile,
+  addToNestModuleList,
+};

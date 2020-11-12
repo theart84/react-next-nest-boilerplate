@@ -1,17 +1,17 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { has } from 'lodash';
 
-import { SystemErrors } from '@common/enums/SystemErrors';
+import { ErrorCodes } from '@common/enums/ErrorCodes';
 
 @Injectable()
 export class StatusCodeResolver {
   private readonly mapping = {
-    [SystemErrors.ROUTE_NOT_FOUND]: HttpStatus.NOT_FOUND,
-    [SystemErrors.REST_VALIDATION_ERROR]: HttpStatus.UNPROCESSABLE_ENTITY,
+    [ErrorCodes.ROUTE_NOT_FOUND]: HttpStatus.NOT_FOUND,
+    [ErrorCodes.REST_VALIDATION_ERROR]: HttpStatus.UNPROCESSABLE_ENTITY,
     default: HttpStatus.INTERNAL_SERVER_ERROR,
   };
 
-  public resolve(systemErrorCode: SystemErrors): number {
+  public resolve(systemErrorCode: ErrorCodes): number {
     return (has(this.mapping, systemErrorCode)
       ? this.mapping[systemErrorCode]
       : this.mapping.default) as number;

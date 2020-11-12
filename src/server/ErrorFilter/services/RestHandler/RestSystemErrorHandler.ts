@@ -12,7 +12,7 @@ export class RestSystemErrorHandler implements IRestHandler {
   public constructor(
     private readonly loggerSystemErrorHandler: LoggerSystemErrorHandler,
     private readonly statusCodeResolver: StatusCodeResolver,
-    private readonly errorsDtoFactory: ErrorDtoFactory,
+    private readonly errorDtoFactory: ErrorDtoFactory,
   ) {}
 
   public async handle(err: SystemError, res: Response): Promise<void> {
@@ -20,7 +20,7 @@ export class RestSystemErrorHandler implements IRestHandler {
 
     res.status(this.statusCodeResolver.resolve(err.getSystemCode()));
     res.json(
-      this.errorsDtoFactory
+      this.errorDtoFactory
         .create(
           err,
           err.getSystemCode(),

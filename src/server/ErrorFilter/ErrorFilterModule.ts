@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { LoggerModule } from '@server/Logger/LoggerModule';
-import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
 import { LoggerDefaultHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerDefaultHandler';
 import { LoggerNotFoundHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerNotFoundHandler';
 import { LoggerRequestValidationErrorHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerRequestValidationErrorHandler';
@@ -13,9 +12,10 @@ import { RestSystemErrorHandler } from '@server/ErrorFilter/services/RestHandler
 import { ErrorFilter } from '@server/ErrorFilter/services/ErrorFilter';
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
+import { ConfigModule } from '@server/Config/ConfigModule';
 
 @Module({
-  imports: [LoggerModule, SystemErrorModule],
+  imports: [LoggerModule, ConfigModule],
   providers: [
     ErrorDtoFactory,
     LoggerDefaultHandler,

@@ -1,9 +1,9 @@
 import { CustomError } from 'ts-custom-error';
 
-import { SystemErrors } from '@common/enums/SystemErrors';
+import { ErrorCodes } from '@common/enums/ErrorCodes';
 
 export class SystemError extends CustomError {
-  private systemCode: SystemErrors;
+  private systemCode: ErrorCodes;
 
   private systemAdditionalData: Record<string, unknown>;
 
@@ -13,11 +13,11 @@ export class SystemError extends CustomError {
     Error.captureStackTrace(this, SystemError);
   }
 
-  public getSystemCode(): SystemErrors {
+  public getSystemCode(): ErrorCodes {
     return this.systemCode;
   }
 
-  public setSystemCode(systemCode: SystemErrors): void {
+  public setSystemCode(systemCode: ErrorCodes): void {
     this.systemCode = systemCode;
   }
 

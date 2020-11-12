@@ -1,12 +1,17 @@
 import { ConfigService as NestConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { CONFIGURATION_SERVICE_TOKEN } from '@nestjs/config/dist/config.constants';
 
 import { ConfigNames } from '@common/enums/ConfigNames';
 import { IProcessEnv } from '@common/types/IProcessEnv';
 
 @Injectable()
 export class ConfigService {
-  public constructor(private readonly nestConfigService: NestConfigService) {}
+  public constructor(
+    @Inject(CONFIGURATION_SERVICE_TOKEN)
+    private readonly nestConfigService: NestConfigService,
+  ) {}
 
   public get<ConfigName extends ConfigNames>(
     name: ConfigName,

@@ -1,13 +1,13 @@
 import { Response } from 'express';
 import { Injectable } from '@nestjs/common';
 import stringify from 'json-stringify-safe';
-import { ValidationError } from 'class-validator';
 
 import { LoggerRequestValidationErrorHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerRequestValidationErrorHandler';
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
 import { IRestHandler } from '@server/ErrorFilter/interfaces/IRestHandler';
-import { SystemErrors } from '@common/enums/SystemErrors';
+import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { SystemValidationError } from '@server/SystemValidationError/dto/SystemValidationError';
 
 @Injectable()
 export class RestRequestValidationErrorHandler implements IRestHandler {
@@ -17,18 +17,22 @@ export class RestRequestValidationErrorHandler implements IRestHandler {
     private readonly errorDtoFactory: ErrorDtoFactory,
   ) {}
 
-  public async handle(err: ValidationError[], res: Response): Promise<void> {
+  public async handle(
+    err: SystemValidationError,
+    res: Response,
+  ): Promise<void> {
     await this.loggerRequestValidationErrorHandler.handle(err);
 
     const dto = this.errorDtoFactory.create(
       err,
-      SystemErrors.REST_VALIDATION_ERROR,
+      ErrorCodes.REST_VALIDATION_ERROR,
       'Validation error',
+      err.getErrors(),
     );
 
     res.status(
       this.systemErrorStatusCodeResolver.resolve(
-        SystemErrors.REST_VALIDATION_ERROR,
+        ErrorCodes.REST_VALIDATION_ERROR,
       ),
     );
     res.setHeader('Content-Type', 'application/json');

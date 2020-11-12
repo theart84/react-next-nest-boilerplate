@@ -3,11 +3,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
 import path from 'path';
 
+export const STORYBOOK_SERVER_ROOT = '/storybook';
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, '../../..', 'storybook-static'),
-      serveRoot: '/storybook',
+      serveRoot: STORYBOOK_SERVER_ROOT,
     }),
   ],
 })

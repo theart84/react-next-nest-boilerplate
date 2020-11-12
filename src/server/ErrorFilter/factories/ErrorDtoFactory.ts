@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { NodeEnvs } from '@common/enums/NodeEnvs';
 import { ConfigService } from '@server/Config/services/ConfigService';
 import { ConfigNames } from '@common/enums/ConfigNames';
-import { SystemErrors } from '@common/enums/SystemErrors';
+import { ErrorCodes } from '@common/enums/ErrorCodes';
 import { ErrorDto } from '@server/ErrorFilter/dto/ErrorDto';
 
 @Injectable()
@@ -16,17 +16,15 @@ export class ErrorDtoFactory {
 
   public create<Error>(
     err: Error,
-    code: SystemErrors,
+    code: ErrorCodes,
     message = '',
-    data: Record<string, unknown> = {},
+    payload: unknown = {},
   ): ErrorDto {
-    const dto = new ErrorDto();
+    const dto = new ErrorDto(err, this.nodeEnv === NodeEnvs.DEVELOPMENT);
 
-    dto.setCode(code).setError(err);
-
-    if (this.nodeEnv === NodeEnvs.DEVELOPMENT) {
-      dto.setData(data).setMessage(message);
-    }
+    dto.code = code;
+    dto.message = message;
+    dto.payload = payload;
 
     return dto;
   }

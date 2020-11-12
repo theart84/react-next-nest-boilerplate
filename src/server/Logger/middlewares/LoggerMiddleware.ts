@@ -6,7 +6,7 @@ func-names: off,
 @typescript-eslint/no-unsafe-return: off,
 prefer-rest-params: off
 */
-import { NestMiddleware } from '@nestjs/common';
+import { Inject, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 import { LoggerService } from '@server/Logger/services/LoggerService';
@@ -14,7 +14,10 @@ import { LoggerService } from '@server/Logger/services/LoggerService';
 export const MAX_RESPONSE_BODY_LENGTH_TO_LOG = 5_128;
 
 export class LoggerMiddleware implements NestMiddleware {
-  public constructor(private readonly logger: LoggerService) {}
+  public constructor(
+    @Inject(LoggerService)
+    private readonly logger: LoggerService,
+  ) {}
 
   public use(req: Request, res: Response, next: NextFunction): void {
     void this.logger.info('New request has come', {

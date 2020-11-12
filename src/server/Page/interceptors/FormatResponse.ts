@@ -3,12 +3,14 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  HttpStatus,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Request, Response } from 'express';
 
 import { Pages } from '@common/enums/Pages';
+import { IData } from '@common/api/ApiResponse';
 
 @Injectable()
 export class FormatResponse implements NestInterceptor {
@@ -25,11 +27,13 @@ export class FormatResponse implements NestInterceptor {
 
     if (isApi) {
       return next.handle().pipe(
-        map((payload) => ({
-          code: 200,
-          message: '',
-          payload,
-        })),
+        map(
+          (payload): IData => ({
+            code: HttpStatus.OK,
+            message: '',
+            payload,
+          }),
+        ),
       );
     }
 

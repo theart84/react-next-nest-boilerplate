@@ -1,3 +1,3 @@
-export const enum LoggerChannelEnum {
+export enum LoggerChannelEnum {
   APPLICATION = 'APP',
 }

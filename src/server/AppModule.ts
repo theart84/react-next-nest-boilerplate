@@ -4,7 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ConfigModule as ConfigModuleNest } from '@nestjs/config';
+import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { RenderModule } from 'nest-next';
 import Next from 'next';
 import DailyRotateFile from 'winston-daily-rotate-file';
@@ -14,13 +14,18 @@ import { WinstonModule } from 'nest-winston';
 import path from 'path';
 
 import { PageModule } from '@server/Page/PageModule';
-import { StorybookModule } from '@server/Storybook/StorybookModule';
+import {
+  STORYBOOK_SERVER_ROOT,
+  StorybookModule,
+} from '@server/Storybook/StorybookModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
 import { NodeEnvs } from '@common/enums/NodeEnvs';
 import { ConfigService } from '@server/Config/services/ConfigService';
 import { ConfigNames } from '@common/enums/ConfigNames';
 import { LoggerMiddleware } from '@server/Logger/middlewares/LoggerMiddleware';
 import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
+import { LoggerModule } from '@server/Logger/LoggerModule';
+import { SystemValidationErrorModule } from '@server/SystemValidationError/SystemValidationErrorModule';
 
 @Module({
   imports: [
@@ -31,6 +36,8 @@ import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
       }),
     ),
     WinstonModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const loggerTransports: Transport[] = [
           new DailyRotateFile({
@@ -52,18 +59,20 @@ import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
         };
       },
     }),
-    ConfigModuleNest.forRoot({
-      envFilePath: path.resolve(__dirname, '../../../.env'),
+    NestConfigModule.forRoot({
+      envFilePath: path.resolve(__dirname, '../../.env'),
     }),
     PageModule,
     StorybookModule,
     ConfigModule,
     ErrorFilterModule,
+    LoggerModule,
+    SystemValidationErrorModule,
   ],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggerMiddleware).forRoutes({
+    consumer.apply(LoggerMiddleware).exclude(STORYBOOK_SERVER_ROOT).forRoutes({
       path: '*',
       method: RequestMethod.ALL,
     });

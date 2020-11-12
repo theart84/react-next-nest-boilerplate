@@ -5,7 +5,7 @@ import stringify from 'json-stringify-safe';
 import { IRestHandler } from '@server/ErrorFilter/interfaces/IRestHandler';
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
-import { SystemErrors } from '@common/enums/SystemErrors';
+import { ErrorCodes } from '@common/enums/ErrorCodes';
 import { LoggerDefaultHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerDefaultHandler';
 
 @Injectable()
@@ -21,11 +21,11 @@ export class RestDefaultHandler implements IRestHandler {
 
     const dto = this.errorDtoFactory.create(
       err,
-      SystemErrors.OTHER,
+      ErrorCodes.OTHER,
       'Internal error',
     );
 
-    res.status(this.statusCodeResolver.resolve(SystemErrors.OTHER));
+    res.status(this.statusCodeResolver.resolve(ErrorCodes.OTHER));
     res.setHeader('Content-Type', 'application/json');
     res.send(stringify(dto.normalize()));
   }

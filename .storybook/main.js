@@ -8,11 +8,10 @@ module.exports = {
     plugins: [
       ...options.plugins,
       /*
-        TODO this plugin need for production build mode
+        TODO данный плагин необходим только в prod режиме
         issue: https://github.com/storybookjs/storybook/issues/12952
-        after fix:
-        Remove plugin
-        Remove --no-dll in package.json
+        После исправления данного бага, необходимо удалить его подключение
+        А также удалить флаг --no-dll флаг при сборке в package.json
        */
       '@babel/plugin-transform-react-jsx',
     ],
