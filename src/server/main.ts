@@ -7,7 +7,7 @@ config({
 });
 
 import { NestFactory } from '@nestjs/core';
-import { RenderFilter, RenderService } from 'nest-next';
+import { RenderFilter } from 'nest-next';
 
 import { AppModule } from '@server/AppModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
@@ -28,8 +28,6 @@ import { SystemValidationErrorFactory } from '@server/SystemValidationError/fact
 
   const renderFilter = app.get(RenderFilter);
 
-  const renderService = app.get(RenderService);
-
   const validationErrorFactory = app
     .select(SystemValidationErrorModule)
     .get(SystemValidationErrorFactory);
@@ -47,18 +45,6 @@ import { SystemValidationErrorFactory } from '@server/SystemValidationError/fact
       },
     }),
   );
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  renderService.setErrorHandler((err, req, res) => {
-    // eslint-disable-next-line no-console
-    console.log(err);
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    res.send({
-      error: 'Test',
-    });
-  });
 
   errorFilter.setRenderFilter(renderFilter);
 

@@ -2,7 +2,6 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
@@ -16,7 +15,6 @@ import path from 'path';
 
 import { PageModule } from '@server/Page/PageModule';
 import {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   STORYBOOK_SERVER_ROOT,
   StorybookModule,
 } from '@server/Storybook/StorybookModule';
@@ -24,7 +22,6 @@ import { ConfigModule } from '@server/Config/ConfigModule';
 import { NodeEnvs } from '@common/enums/NodeEnvs';
 import { ConfigService } from '@server/Config/services/ConfigService';
 import { ConfigNames } from '@common/enums/ConfigNames';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { LoggerMiddleware } from '@server/Logger/middlewares/LoggerMiddleware';
 import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
 import { LoggerModule } from '@server/Logger/LoggerModule';
@@ -74,11 +71,10 @@ import { SystemValidationErrorModule } from '@server/SystemValidationError/Syste
   ],
 })
 export class AppModule implements NestModule {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public configure(consumer: MiddlewareConsumer): void {
-    // consumer.apply(LoggerMiddleware).exclude(STORYBOOK_SERVER_ROOT).forRoutes({
-    //   path: '*',
-    //   method: RequestMethod.ALL,
-    // });
+    consumer.apply(LoggerMiddleware).exclude(STORYBOOK_SERVER_ROOT).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    });
   }
 }

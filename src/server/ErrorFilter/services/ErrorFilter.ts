@@ -17,7 +17,7 @@ import { SystemValidationError } from '@server/SystemValidationError/dto/SystemV
 
 @Injectable()
 export class ErrorFilter implements ExceptionFilter {
-  private renderFilter: RenderFilter;
+  private renderFilter!: RenderFilter;
 
   public constructor(
     private readonly systemErrorHandler: RestSystemErrorHandler,

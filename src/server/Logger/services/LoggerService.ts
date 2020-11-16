@@ -104,12 +104,12 @@ export class LoggerService {
   private async log(message: string, options?: ILoggerOptions): Promise<void> {
     const { isWithStackTrace = false, level, channel, extra } = {
       ...options,
-      level: options.level || LoggerLevelEnum.INFO,
-      channel: options.channel || this.getDefaultChannel(),
-      extra: options.extra,
+      level: options?.level || LoggerLevelEnum.INFO,
+      channel: options?.channel || this.getDefaultChannel(),
+      extra: options?.extra,
     };
 
-    let context: ILoggerContext;
+    let context: ILoggerContext | undefined;
 
     if (isWithStackTrace) {
       context = {

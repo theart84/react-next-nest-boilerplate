@@ -8,7 +8,7 @@ type IPageApiServicesBase = {
 };
 
 type IPageApiServicesInstanceBase = {
-  [key in Pages]?: ApiPageBase;
+  [key in Pages]: ApiPageBase | undefined;
 };
 
 const pagesApiServices: IPageApiServicesBase = {

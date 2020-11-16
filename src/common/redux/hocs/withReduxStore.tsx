@@ -1,10 +1,11 @@
 /* eslint no-underscore-dangle: off */
 import React from 'react';
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { AppContext, AppInitialProps } from 'next/app';
+import { AppContext, AppInitialProps, AppProps } from 'next/app';
 
 import { initializeStore, IRootState } from '@common/redux/store';
 import { INextPageContext } from '@common/pages/types/INextPageContext';
+import { ApiPageBase } from '@common/api/ApiPageBase';
 
 const isServer = typeof window === 'undefined';
 
@@ -22,12 +23,12 @@ const getOrCreateStore = (
   return window.__NEXT_REDUX_STORE__;
 };
 
-interface IProperties {
+interface IProperties extends AppProps {
   initialReduxState: IRootState;
 }
 
 export const withReduxStore = (
-  App: React.FC<{ reduxStore: EnhancedStore<IRootState> }> & {
+  App: React.FC<AppProps & { reduxStore: EnhancedStore<IRootState> }> & {
     getInitialProps(context: AppContext): Promise<AppInitialProps>;
   },
 ): ((properties: IProperties) => JSX.Element) => {
@@ -40,10 +41,15 @@ export const withReduxStore = (
     return <App {...properties} reduxStore={reduxStore} />;
   };
 
-  WithRedux.getInitialProps = async (context: AppContext) => {
+  WithRedux.getInitialProps = async <
+    Response extends Record<keyof unknown, unknown>,
+    ApiPageService extends ApiPageBase
+  >(
+    context: AppContext,
+  ) => {
     const store = getOrCreateStore();
 
-    (context.ctx as INextPageContext).store = store;
+    (context.ctx as INextPageContext<Response, ApiPageService>).store = store;
 
     let appProperties = {};
 

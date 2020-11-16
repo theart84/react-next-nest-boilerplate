@@ -9,6 +9,7 @@ import { Layout } from '@components/Layout';
 import { getPageApiService } from '@common/pages/utils/getPageApiService';
 import { Pages } from '@common/enums/Pages';
 import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
+import { ApiPageBase } from '@common/api/ApiPageBase';
 
 export const App = ({
   Component,
@@ -22,14 +23,20 @@ export const App = ({
   </Provider>
 );
 
-App.getInitialProps = async ({
+App.getInitialProps = async <
+  Response extends Record<keyof unknown, unknown>,
+  ApiPageService extends ApiPageBase
+>({
   Component,
   ctx,
 }: AppContext & {
   Component: IBaseNextPage;
-  ctx: Omit<INextPageContext, 'isServer' | 'apiService'>;
+  ctx: Omit<
+    INextPageContext<Response, ApiPageService>,
+    'isServer' | 'apiService'
+  >;
 }): Promise<AppInitialProps> => {
-  let pageProperties = {};
+  let pageProperties: unknown = {};
 
   if (Component.init) {
     const pageName = ctx.pathname.replace('/views/', '');
@@ -41,7 +48,7 @@ App.getInitialProps = async ({
     pageProperties = await Component.init({
       ...ctx,
       isServer: !!ctx.req,
-      apiService,
+      apiService: apiService as undefined,
     });
   }
 

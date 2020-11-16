@@ -37,12 +37,15 @@ export class LoggerMiddleware implements NestMiddleware {
 
     const oldEnd: typeof res.end = res.end.bind(res);
 
-    const chunks = [];
+    const chunks: Uint8Array[] = [];
 
     res.write = function (chunk) {
       chunks.push(chunk);
 
-      return oldWrite.apply(res, arguments);
+      return oldWrite.apply(
+        res,
+        (arguments as unknown) as Parameters<typeof res.write>,
+      );
     };
 
     res.end = function (chunk) {
@@ -50,7 +53,7 @@ export class LoggerMiddleware implements NestMiddleware {
         chunks.push(chunk);
       }
 
-      oldEnd.apply(res, arguments);
+      oldEnd.apply(res, (arguments as unknown) as Parameters<typeof res.end>);
     };
 
     res.on('finish', () => {

@@ -76,10 +76,9 @@ export abstract class ApiServiceBase {
     return this.createResponseFromAxios<Response>(promise);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  private isApiResponseType<Response extends IData<AnyObject>>(
-    response: Response,
-  ): boolean {
+  private isApiResponseType<Response extends AnyObject>(
+    response: AnyObject,
+  ): response is IData<Response> {
     return (
       response &&
       Number.isInteger(response.code) &&
@@ -90,12 +89,12 @@ export abstract class ApiServiceBase {
   }
 
   private transformResponse<Response extends AnyObject>(
-    response: AxiosResponse<IData<Response>>,
+    response: AxiosResponse,
   ): ApiResponse<Response> | never {
     const { data } = response;
 
-    if (this.isApiResponseType(data)) {
-      return new ApiResponse(data);
+    if (this.isApiResponseType<Response>(data)) {
+      return new ApiResponse<Response>(data);
     }
 
     throw new TypeError(
@@ -103,18 +102,24 @@ export abstract class ApiServiceBase {
     );
   }
 
-  private async createResponseFromAxios<T extends AnyObject>(
-    promise: AxiosPromise<IData<T>>,
-  ): Promise<ApiResponse<T>> {
+  private async createResponseFromAxios<Response extends AnyObject>(
+    promise: AxiosPromise<IData<Response>>,
+  ): Promise<ApiResponse<Response>> {
     try {
       const response = await promise;
 
       return this.transformResponse(response);
     } catch (error) {
       if ('isAxiosError' in error && 'response' in error) {
-        throw new ApiError(
-          this.transformResponse((error as AxiosError).response),
-        );
+        const { response: data } = error as AxiosError<IData<Response>>;
+
+        if (!data) {
+          throw new TypeError(
+            `Server returned invalid data: ${JSON.stringify(data)}`,
+          );
+        }
+
+        throw new ApiError(this.transformResponse(data));
       }
 
       throw error;

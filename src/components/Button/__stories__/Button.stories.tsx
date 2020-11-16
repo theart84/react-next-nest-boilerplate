@@ -1,18 +1,25 @@
-import { PropsWithChildren, FC } from 'react';
+import { Meta } from '@storybook/react';
 
-import { Meta, Story } from '@storybook/react';
-
-import { IProps, Button } from '@components/Button/Button';
+import { Button } from '@components/Button/Button';
+import { createBaseStory } from '@common/utils/storybook/createBaseStory';
+import { createStory } from '@common/utils/storybook/createStory';
 
 export default {
   title: 'Components/Button',
   component: Button,
 } as Meta;
 
-export const Basic: Story<PropsWithChildren<IProps>> = Button.bind({});
+export const Basic = createBaseStory(Button, {
+  width: 100,
+  children: 'Default button',
+});
 
-Basic.args = { width: 100, children: 'Default button' };
+export const Small = createStory(Basic, {
+  width: 200,
+  children: 'Small button',
+});
 
-export const small: FC = () => <Button width={200}>Small button</Button>;
-
-export const large: FC = () => <Button width={300}>Large button</Button>;
+export const Large = createStory(Basic, {
+  width: 300,
+  children: 'Large button',
+});

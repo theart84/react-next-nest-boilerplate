@@ -11,11 +11,11 @@ import { IData } from '@common/api/ApiResponse';
 export class ErrorDto implements IData {
   public constructor(private error: any, private allowStack?: boolean) {}
 
-  public code: ErrorCodes;
+  public code!: ErrorCodes;
 
   public payload: any;
 
-  public message: string;
+  public message!: string;
 
   public normalize(): IData {
     return {

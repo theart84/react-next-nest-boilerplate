@@ -3,9 +3,9 @@ import { CustomError } from 'ts-custom-error';
 import { ErrorCodes } from '@common/enums/ErrorCodes';
 
 export class SystemError extends CustomError {
-  private systemCode: ErrorCodes;
+  private systemCode!: ErrorCodes;
 
-  private systemAdditionalData: Record<string, unknown>;
+  private systemAdditionalData!: Record<string, unknown>;
 
   public constructor(message?: string) {
     super(message);

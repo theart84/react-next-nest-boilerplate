@@ -7,11 +7,15 @@ import { getPageRoute } from '@common/pages/utils/getPageRoutes';
 
 export const Page = (page: Pages): MethodDecorator => (
   target,
-  propertyKey: string,
+  propertyKey: string | symbol,
   descriptor,
 ) => {
   const pageRoute = getPageRoute(page);
 
   GetPageWithApi(pageRoute)(target, propertyKey, descriptor);
-  UseInterceptors(new FormatResponse(page))(target, propertyKey, descriptor);
+  UseInterceptors(new FormatResponse(page))(
+    target,
+    String(propertyKey),
+    descriptor,
+  );
 };

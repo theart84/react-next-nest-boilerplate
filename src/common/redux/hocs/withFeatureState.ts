@@ -12,22 +12,22 @@ type IMapDispatchToProps = (dispatch: Dispatch) => Record<string, unknown>;
 
 export type IWithFeatureState<
   Feature extends Features,
-  MapStateToProps extends IMapStateToProps = undefined,
-  MapDispatchToProps extends IMapDispatchToProps = undefined
-> = {
-  state: IFeatureState<Feature>;
-  setState(response: IFeatureState<Feature>): void;
-} & (MapStateToProps extends IMapStateToProps
+  MapStateToProps extends IMapStateToProps | undefined = undefined,
+  MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
+> = (MapStateToProps extends IMapStateToProps
   ? ReturnType<MapStateToProps>
-  : undefined) &
+  : Record<string, unknown>) &
   (MapDispatchToProps extends IMapDispatchToProps
     ? ReturnType<MapDispatchToProps>
-    : undefined);
+    : Record<string, unknown>) & {
+    state: IFeatureState<Feature>;
+    setState(response: IFeatureState<Feature>): void;
+  };
 
 interface IParams<
   Feature extends Features,
-  MapStateToProps extends IMapStateToProps = undefined,
-  MapDispatchToProps extends IMapDispatchToProps = undefined
+  MapStateToProps extends IMapStateToProps | undefined = undefined,
+  MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > {
   feature: Feature;
   actions: IBaseActions<Feature>;
@@ -37,16 +37,16 @@ interface IParams<
 
 type IReturnType<
   Feature extends Features,
-  MapStateToProps extends IMapStateToProps = undefined,
-  MapDispatchToProps extends IMapDispatchToProps = undefined
+  MapStateToProps extends IMapStateToProps | undefined = undefined,
+  MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > = InferableComponentEnhancer<
   IWithFeatureState<Feature, MapStateToProps, MapDispatchToProps>
 >;
 
 export const withFeatureState = <
   Feature extends Features,
-  MapStateToProps extends IMapStateToProps = undefined,
-  MapDispatchToProps extends IMapDispatchToProps = undefined
+  MapStateToProps extends IMapStateToProps | undefined = undefined,
+  MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 >({
   feature,
   actions,

@@ -8,7 +8,7 @@ import { IBasePageResponse } from '@common/pages/types/IBasePageResponse';
 
 export type IBaseNextPage<
   Page extends Pages = Pages,
-  CustomComponentParams = Record<string, unknown>
+  CustomComponentParams extends Record<string, unknown> | undefined = undefined
 > = NextPage<
   IPageResponse[Page] extends IBasePageResponse
     ? IPageResponse[Page]['page']
@@ -20,8 +20,10 @@ export type IBaseNextPage<
       IPageApiServicesInstance[Page]
     >,
   ): Promise<
-    IPageResponse[Page] extends IBasePageResponse
-      ? IPageResponse[Page]['page']
-      : CustomComponentParams
+    CustomComponentParams extends Record<string, unknown>
+      ? CustomComponentParams
+      : IPageResponse[Page]['page'] extends undefined
+      ? void
+      : IPageResponse[Page]['page']
   >;
 };
