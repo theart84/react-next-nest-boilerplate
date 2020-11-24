@@ -12,26 +12,24 @@ import * as Transport from 'winston-transport';
 import { format, transports } from 'winston';
 import { WinstonModule } from 'nest-winston';
 import path from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { PageModule } from '@server/Page/PageModule';
-import {
-  STORYBOOK_SERVER_ROOT,
-  StorybookModule,
-} from '@server/Storybook/StorybookModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
-import { NodeEnvs } from '@common/enums/NodeEnvs';
+import { NodeEnv } from '@common/enums/NodeEnv';
 import { ConfigService } from '@server/Config/services/ConfigService';
-import { ConfigNames } from '@common/enums/ConfigNames';
+import { ConfigName } from '@common/enums/ConfigName';
 import { LoggerMiddleware } from '@server/Logger/middlewares/LoggerMiddleware';
 import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
 import { LoggerModule } from '@server/Logger/LoggerModule';
 import { SystemValidationErrorModule } from '@server/SystemValidationError/SystemValidationErrorModule';
+import { ErrorNextModule } from '@server/ErrorNext/ErrorNextModule';
 
 @Module({
   imports: [
     RenderModule.forRootAsync(
       Next({
-        dev: process.env.NODE_ENV === NodeEnvs.DEVELOPMENT,
+        dev: process.env.NODE_ENV !== 'production',
         dir: path.resolve(__dirname, '../..'),
       }),
     ),
@@ -45,11 +43,11 @@ import { SystemValidationErrorModule } from '@server/SystemValidationError/Syste
             datePattern: 'YYYY-MM-DD-HH',
             maxSize: '20m',
             maxFiles: '7d',
-            dirname: configService.get(ConfigNames.NEST_LOG_PATH),
+            dirname: configService.get(ConfigName.NEST_LOG_PATH),
           }),
         ];
 
-        if (configService.get(ConfigNames.NODE_ENV) === NodeEnvs.DEVELOPMENT) {
+        if (configService.get(ConfigName.NODE_ENV) === NodeEnv.DEVELOPMENT) {
           loggerTransports.push(new transports.Console());
         }
 
@@ -62,17 +60,21 @@ import { SystemValidationErrorModule } from '@server/SystemValidationError/Syste
     NestConfigModule.forRoot({
       envFilePath: path.resolve(__dirname, '../../.env'),
     }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, '../..', 'storybook-static'),
+      serveRoot: '/storybook',
+    }),
     PageModule,
-    StorybookModule,
     ConfigModule,
     ErrorFilterModule,
     LoggerModule,
     SystemValidationErrorModule,
+    ErrorNextModule,
   ],
 })
 export class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggerMiddleware).exclude(STORYBOOK_SERVER_ROOT).forRoutes({
+    consumer.apply(LoggerMiddleware).exclude('/storybook').forRoutes({
       path: '*',
       method: RequestMethod.ALL,
     });

@@ -2,10 +2,10 @@ import Head from 'next/head';
 
 import { About } from '@features/About/About';
 import { aboutSlice } from '@features/About/duck/slice';
-import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
-import { Pages } from '@common/enums/Pages';
+import { IBaseNextPage } from '@common/types/IBaseNextPage';
+import { Page } from '@common/enums/Page';
 
-export const Test: IBaseNextPage<Pages.SAMPLE_TEST> = ({ title }) => (
+export const Test: IBaseNextPage<Page.SAMPLE_TEST> = ({ title }) => (
   <div>
     <Head>
       <title>{title}</title>

@@ -4,12 +4,13 @@ import { EnhancedStore } from '@reduxjs/toolkit';
 
 import { withReduxStore } from '@common/redux/hocs/withReduxStore';
 import { IRootState } from '@common/redux/store';
-import { INextPageContext } from '@common/pages/types/INextPageContext';
-import { Layout } from '@components/Layout';
-import { getPageApiService } from '@common/pages/utils/getPageApiService';
-import { Pages } from '@common/enums/Pages';
-import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
+import { INextPageContext } from '@common/types/INextPageContext';
+import { Layout } from '@components/Layout/Layout';
+import { getPageApiService } from '@common/api/utils/getPageApiService';
+import { Page } from '@common/enums/Page';
+import { IBaseNextPage } from '@common/types/IBaseNextPage';
 import { ApiPageBase } from '@common/api/ApiPageBase';
+import { apiErrorNext } from '@common/api/services/ErrorNext/ApiErrorNext';
 
 export const App = ({
   Component,
@@ -41,14 +42,13 @@ App.getInitialProps = async <
   if (Component.init) {
     const pageName = ctx.pathname.replace('/views/', '');
 
-    const ApiService = getPageApiService(pageName as Pages);
-
-    const apiService = ApiService && new ApiService();
+    const apiService = getPageApiService(pageName as Page);
 
     pageProperties = await Component.init({
       ...ctx,
       isServer: !!ctx.req,
-      apiService: apiService as undefined,
+      apiService,
+      errorApiService: apiErrorNext,
     });
   }
 

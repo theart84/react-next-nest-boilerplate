@@ -5,13 +5,13 @@ import {
   IWithFeatureState,
   withFeatureState,
 } from '@common/redux/hocs/withFeatureState';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 
-export const MainComponent: FC<IWithFeatureState<Features.MAIN>> = ({
+export const MainComponent: FC<IWithFeatureState<Feature.MAIN>> = ({
   state,
 }) => <div>title from Redux: {state.title}</div>;
 
 export const Main = withFeatureState({
-  feature: Features.MAIN,
+  feature: Feature.MAIN,
   actions: mainSlice.actions,
 })(MainComponent);

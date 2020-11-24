@@ -1,9 +1,9 @@
 import { Info } from '@features/Info/Info';
-import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
-import { Pages } from '@common/enums/Pages';
+import { IBaseNextPage } from '@common/types/IBaseNextPage';
+import { Page } from '@common/enums/Page';
 import { infoSlice } from '@features/Info/duck/slice';
 
-const InfoPage: IBaseNextPage<Pages.INFO> = () => (
+const InfoPage: IBaseNextPage<Page.INFO> = () => (
   <div>
     <Info />
   </div>

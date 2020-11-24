@@ -1,12 +1,12 @@
 import { Controller } from '@nestjs/common';
 
-import { Page } from '@server/Page/decorators/Page';
-import { Pages } from '@common/enums/Pages';
-import { IInfoResponse } from '@common/dto/pages/IInfoResponse';
+import { PageGet } from '@server/Page/decorators/PageGet';
+import { Page } from '@common/enums/Page';
+import { IInfoResponse } from '@common/api/dto/Page/IInfoResponse';
 
 @Controller()
 export class InfoController {
-  @Page(Pages.INFO)
+  @PageGet(Page.INFO)
   public index(): IInfoResponse {
     return {
       features: {

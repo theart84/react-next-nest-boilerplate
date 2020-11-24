@@ -4,7 +4,7 @@ import {
   IWithFeatureState,
   withFeatureState,
 } from '@common/redux/hocs/withFeatureState';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 import { aboutSlice } from '@features/About/duck/slice';
 import { tickSelector } from '@features/About/duck/selectors';
 import { IRootState } from '@common/redux/store';
@@ -21,14 +21,14 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   } as const);
 
 export const withState = withFeatureState({
-  feature: Features.ABOUT,
+  feature: Feature.ABOUT,
   actions: aboutSlice.actions,
   mapStateToProps,
   mapDispatchToProps,
 });
 
 export type IWithState = IWithFeatureState<
-  Features.ABOUT,
+  Feature.ABOUT,
   typeof mapStateToProps,
   typeof mapDispatchToProps
 >;

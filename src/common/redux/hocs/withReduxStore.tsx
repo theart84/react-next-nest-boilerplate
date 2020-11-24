@@ -4,7 +4,7 @@ import { EnhancedStore } from '@reduxjs/toolkit';
 import { AppContext, AppInitialProps, AppProps } from 'next/app';
 
 import { initializeStore, IRootState } from '@common/redux/store';
-import { INextPageContext } from '@common/pages/types/INextPageContext';
+import { INextPageContext } from '@common/types/INextPageContext';
 import { ApiPageBase } from '@common/api/ApiPageBase';
 
 const isServer = typeof window === 'undefined';

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
-import { Features } from '@common/enums/Features';
-import { IInfo } from '@common/dto/features/IInfo';
+import { Feature } from '@common/enums/Feature';
+import { IInfo } from '@common/api/dto/Info/IInfo';
 
 export type IState = IBaseFeatureState<IInfo>;
 
 export const infoSlice = createSlice({
-  name: Features.INFO,
+  name: Feature.INFO,
   initialState: {
     state: {
       phone: 0,

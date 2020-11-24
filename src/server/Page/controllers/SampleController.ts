@@ -1,13 +1,13 @@
 import { Controller } from '@nestjs/common';
 
-import { ISampleResponse } from '@common/dto/pages/ISampleResponse';
-import { Page } from '@server/Page/decorators/Page';
-import { ISampleTestResponse } from '@common/dto/pages/ISampleTestResponse';
-import { Pages } from '@common/enums/Pages';
+import { ISampleResponse } from '@common/api/dto/Page/ISampleResponse';
+import { PageGet } from '@server/Page/decorators/PageGet';
+import { ISampleTestResponse } from '@common/api/dto/Page/ISampleTestResponse';
+import { Page } from '@common/enums/Page';
 
 @Controller()
 export class SampleController {
-  @Page(Pages.SAMPLE)
+  @PageGet(Page.SAMPLE)
   public index(): ISampleResponse {
     return {
       features: {
@@ -17,7 +17,7 @@ export class SampleController {
     };
   }
 
-  @Page(Pages.SAMPLE_TEST)
+  @PageGet(Page.SAMPLE_TEST)
   public test(): ISampleTestResponse {
     return {
       features: {

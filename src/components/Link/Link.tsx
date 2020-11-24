@@ -1,17 +1,19 @@
 import { FC } from 'react';
 import LinkBase from 'next/link';
+import { LinkProps } from 'next/dist/client/link';
 
-import { Pages } from '@common/enums/Pages';
-import { getPageRoute } from '@common/pages/utils/getPageRoutes';
+import { Page } from '@common/enums/Page';
+import { getPageRoute } from '@common/api/utils/getPageRoutes';
 
-export interface IProps {
-  href: Pages;
+export interface IProps extends LinkProps {
+  href: Page;
 }
 
-export const Link: FC<IProps> = ({ href, children }) => (
+export const Link: FC<IProps> = ({ href, children, ...props }) => (
   <LinkBase
-    href={href === Pages.INDEX ? '/views/Index' : href}
+    href={href === Page.INDEX ? '/views/Index' : href}
     as={getPageRoute(href)}
+    {...props}
   >
     {children}
   </LinkBase>

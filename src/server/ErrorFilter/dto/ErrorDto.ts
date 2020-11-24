@@ -5,13 +5,13 @@
 */
 import { get } from 'lodash';
 
-import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { ErrorCode } from '@common/enums/ErrorCode';
 import { IData } from '@common/api/ApiResponse';
 
 export class ErrorDto implements IData {
   public constructor(private error: any, private allowStack?: boolean) {}
 
-  public code!: ErrorCodes;
+  public code!: ErrorCode;
 
   public payload: any;
 

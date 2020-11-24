@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect';
 
 import { getFeatureSelector } from '@common/redux/selectors/getFeatureStateSelector';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 
-const featureSelector = getFeatureSelector(Features.ABOUT);
+const featureSelector = getFeatureSelector(Feature.ABOUT);
 
 export const tickSelector = createSelector(
   featureSelector,

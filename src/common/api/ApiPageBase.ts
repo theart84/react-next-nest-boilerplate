@@ -1,13 +1,13 @@
 import { ApiServiceBase } from '@common/api/ApiServiceBase';
-import { Pages } from '@common/enums/Pages';
-import { getPageRoute } from '@common/pages/utils/getPageRoutes';
+import { Page } from '@common/enums/Page';
+import { getPageRoute } from '@common/api/utils/getPageRoutes';
 
 export class ApiPageBase extends ApiServiceBase {
   public constructor() {
     super();
   }
 
-  protected getRoute(page: Pages): string {
+  protected getRoute(page: Page): string {
     return this.getUrl(getPageRoute(page));
   }
 

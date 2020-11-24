@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 
 import { IRootState } from '@common/redux/store';
 import { getFeatureStateSelector } from '@common/redux/selectors/getFeatureStateSelector';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 import { IFeatureState } from '@common/redux/types/IFeatureState';
 import { IBaseActions } from '@common/redux/types/IBaseActions';
 
@@ -11,7 +11,7 @@ type IMapStateToProps = (state: IRootState) => Record<string, unknown>;
 type IMapDispatchToProps = (dispatch: Dispatch) => Record<string, unknown>;
 
 export type IWithFeatureState<
-  Feature extends Features,
+  FeatureName extends Feature,
   MapStateToProps extends IMapStateToProps | undefined = undefined,
   MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > = (MapStateToProps extends IMapStateToProps
@@ -20,31 +20,31 @@ export type IWithFeatureState<
   (MapDispatchToProps extends IMapDispatchToProps
     ? ReturnType<MapDispatchToProps>
     : Record<string, unknown>) & {
-    state: IFeatureState<Feature>;
-    setState(response: IFeatureState<Feature>): void;
+    state: IFeatureState<FeatureName>;
+    setState(response: IFeatureState<FeatureName>): void;
   };
 
 interface IParams<
-  Feature extends Features,
+  FeatureName extends Feature,
   MapStateToProps extends IMapStateToProps | undefined = undefined,
   MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > {
-  feature: Feature;
-  actions: IBaseActions<Feature>;
+  feature: FeatureName;
+  actions: IBaseActions<FeatureName>;
   mapStateToProps?: MapStateToProps;
   mapDispatchToProps?: MapDispatchToProps;
 }
 
 type IReturnType<
-  Feature extends Features,
+  FeatureName extends Feature,
   MapStateToProps extends IMapStateToProps | undefined = undefined,
   MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > = InferableComponentEnhancer<
-  IWithFeatureState<Feature, MapStateToProps, MapDispatchToProps>
+  IWithFeatureState<FeatureName, MapStateToProps, MapDispatchToProps>
 >;
 
 export const withFeatureState = <
-  Feature extends Features,
+  FeatureName extends Feature,
   MapStateToProps extends IMapStateToProps | undefined = undefined,
   MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 >({
@@ -52,8 +52,8 @@ export const withFeatureState = <
   actions,
   mapStateToProps,
   mapDispatchToProps,
-}: IParams<Feature, MapStateToProps, MapDispatchToProps>): IReturnType<
-  Feature,
+}: IParams<FeatureName, MapStateToProps, MapDispatchToProps>): IReturnType<
+  FeatureName,
   MapStateToProps,
   MapDispatchToProps
 > => {
@@ -61,15 +61,15 @@ export const withFeatureState = <
 
   const mapStateToProperties = (
     state: IRootState,
-  ): { state: IFeatureState<Feature> } & ReturnType<IMapStateToProps> => ({
+  ): { state: IFeatureState<FeatureName> } & ReturnType<IMapStateToProps> => ({
     state: responseSelector(state),
     ...(mapStateToProps ? mapStateToProps(state) : undefined),
   });
 
   const mapDispatchToProperties = (
     dispatch: Dispatch,
-  ): { setState(response: IFeatureState<Feature>): void } => ({
-    setState: (response: IFeatureState<Feature>) =>
+  ): { setState(response: IFeatureState<FeatureName>): void } => ({
+    setState: (response: IFeatureState<FeatureName>) =>
       dispatch(actions.setState(response)),
     ...(mapDispatchToProps ? mapDispatchToProps(dispatch) : undefined),
   });

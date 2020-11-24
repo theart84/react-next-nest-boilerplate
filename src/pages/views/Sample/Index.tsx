@@ -1,17 +1,17 @@
 import { Main } from '@features/Main/Main';
 import { About } from '@features/About/About';
 import { Link } from '@components/Link/Link';
-import { Pages } from '@common/enums/Pages';
-import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
+import { Page } from '@common/enums/Page';
+import { IBaseNextPage } from '@common/types/IBaseNextPage';
 import { aboutSlice } from '@features/About/duck/slice';
 import { mainSlice } from '@features/Main/duck/slice';
 
-const Index: IBaseNextPage<Pages.SAMPLE> = () => (
+const Index: IBaseNextPage<Page.SAMPLE> = () => (
   <div>
     <Main />
     <About />
     <div>
-      <Link href={Pages.INDEX}>To index</Link>
+      <Link href={Page.INDEX}>To index</Link>
     </div>
   </div>
 );

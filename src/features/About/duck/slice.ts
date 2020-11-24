@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
-import { Features } from '@common/enums/Features';
-import { IAbout } from '@common/dto/features/IAbout';
+import { Feature } from '@common/enums/Feature';
+import { IAbout } from '@common/api/dto/About/IAbout';
 
 export interface IState extends IBaseFeatureState<IAbout> {
   tick: number;
 }
 
 export const aboutSlice = createSlice({
-  name: Features.ABOUT,
+  name: Feature.ABOUT,
   initialState: {
     state: {
       name: 'INIT NAME',

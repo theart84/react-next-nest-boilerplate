@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 
-import { NodeEnvs } from '@common/enums/NodeEnvs';
+import { NodeEnv } from '@common/enums/NodeEnv';
 import { ConfigService } from '@server/Config/services/ConfigService';
-import { ConfigNames } from '@common/enums/ConfigNames';
-import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { ConfigName } from '@common/enums/ConfigName';
+import { ErrorCode } from '@common/enums/ErrorCode';
 import { ErrorDto } from '@server/ErrorFilter/dto/ErrorDto';
 
 @Injectable()
 export class ErrorDtoFactory {
-  private readonly nodeEnv: NodeEnvs;
+  private readonly nodeEnv: NodeEnv;
 
   public constructor(private readonly configService: ConfigService) {
-    this.nodeEnv = configService.get(ConfigNames.NODE_ENV);
+    this.nodeEnv = configService.get(ConfigName.NODE_ENV);
   }
 
   public create<Error>(
     err: Error,
-    code: ErrorCodes,
+    code: ErrorCode,
     message = '',
     payload: unknown = {},
   ): ErrorDto {
-    const dto = new ErrorDto(err, this.nodeEnv === NodeEnvs.DEVELOPMENT);
+    const dto = new ErrorDto(err, this.nodeEnv === NodeEnv.DEVELOPMENT);
 
     dto.code = code;
     dto.message = message;

@@ -7,15 +7,15 @@ config({
 });
 
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import { RenderFilter } from 'nest-next';
 
 import { AppModule } from '@server/AppModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
-import { ConfigNames } from '@common/enums/ConfigNames';
+import { ConfigName } from '@common/enums/ConfigName';
 import { ConfigService } from '@server/Config/services/ConfigService';
 import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
 import { ErrorFilter } from '@server/ErrorFilter/services/ErrorFilter';
-import { ValidationPipe } from '@nestjs/common';
 import { SystemValidationErrorModule } from '@server/SystemValidationError/SystemValidationErrorModule';
 import { SystemValidationErrorFactory } from '@server/SystemValidationError/factories/SystemValidationErrorFactory';
 
@@ -50,7 +50,7 @@ import { SystemValidationErrorFactory } from '@server/SystemValidationError/fact
 
   app.useGlobalFilters(errorFilter);
 
-  const appPort = configService.get(ConfigNames.NEST_SERVER_PORT);
+  const appPort = configService.get(ConfigName.NEST_SERVER_PORT);
 
   await app.listen(appPort);
 })();

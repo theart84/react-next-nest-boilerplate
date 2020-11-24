@@ -1,5 +1,7 @@
 {
-  "watch": ["src/server/**/*"],
+  "watch": [
+    "src/server/**/*"
+  ],
   "ext": "ts,tsx",
-  "exec": "ts-node -r tsconfig-paths/register ./src/server/main.ts"
+  "exec": "node --inspect=localhost:5555 --require ts-node/register --require tsconfig-paths/register ./src/server/main.ts"
 }

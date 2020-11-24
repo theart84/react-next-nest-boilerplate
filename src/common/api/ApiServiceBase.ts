@@ -9,10 +9,16 @@ import Axios, {
 import { AnyObject } from 'immer/dist/types/types-internal';
 
 import { ApiResponse, IData } from '@common/api/ApiResponse';
-import { ApiError } from '@common/api/ApiError';
+import { ApiErrorDto } from '@common/api/ApiErrorDto';
+import {
+  ApiErrorNext,
+  apiErrorNext,
+} from '@common/api/services/ErrorNext/ApiErrorNext';
 
 export abstract class ApiServiceBase {
   private readonly axios: AxiosInstance;
+
+  private readonly apiErrorNext: ApiErrorNext;
 
   protected constructor() {
     this.axios = Axios.create({
@@ -21,6 +27,17 @@ export abstract class ApiServiceBase {
         'X-Requested-With': 'XMLHttpRequest',
       },
     });
+
+    this.apiErrorNext = apiErrorNext;
+
+    this.axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        this.apiErrorNext.sendError(error);
+
+        throw error;
+      },
+    );
   }
 
   protected get<Response extends AnyObject>(
@@ -119,7 +136,7 @@ export abstract class ApiServiceBase {
           );
         }
 
-        throw new ApiError(this.transformResponse(data));
+        throw new ApiErrorDto(this.transformResponse(data));
       }
 
       throw error;

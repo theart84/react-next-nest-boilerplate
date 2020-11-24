@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IMain } from '@common/dto/features/IMain';
+import { IMain } from '@common/api/dto/Main/IMain';
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 
 export type IState = IBaseFeatureState<IMain>;
 
 export const mainSlice = createSlice({
-  name: Features.MAIN,
+  name: Feature.MAIN,
   initialState: {
     state: {
       title: 'INIT TITLE',

@@ -1,9 +1,9 @@
-import { LoggerLevelEnum } from '@server/Logger/enums/LoggerLevelEnum';
-import { LoggerChannelEnum } from '@server/Logger/enums/LoggerChannelEnum';
+import { LoggerLevel } from '@server/Logger/enums/LoggerLevel';
+import { LoggerChannel } from '@server/Logger/enums/LoggerChannel';
 
 export interface ILoggerOptions {
-  level?: LoggerLevelEnum;
-  channel?: LoggerChannelEnum;
+  level?: LoggerLevel;
+  channel?: LoggerChannel;
   extra?: Record<string, unknown>;
   isWithStackTrace?: boolean;
 }

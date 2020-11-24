@@ -24,7 +24,7 @@ export class LoggerMiddleware implements NestMiddleware {
       extra: {
         request: {
           ip: req.ip,
-          url: req.url,
+          url: req.baseUrl,
           headers: req.headers,
           method: req.method,
           query: req.query,

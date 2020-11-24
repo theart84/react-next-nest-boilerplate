@@ -5,15 +5,15 @@ import {
   StateFromReducersMapObject,
 } from '@reduxjs/toolkit';
 
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 import { mainSlice } from '@features/Main/duck/slice';
 import { aboutSlice } from '@features/About/duck/slice';
 import { infoSlice } from '@features/Info/duck/slice';
 
 const reducer = {
-  [Features.MAIN]: mainSlice.reducer,
-  [Features.ABOUT]: aboutSlice.reducer,
-  [Features.INFO]: infoSlice.reducer,
+  [Feature.MAIN]: mainSlice.reducer,
+  [Feature.ABOUT]: aboutSlice.reducer,
+  [Feature.INFO]: infoSlice.reducer,
 };
 
 export type IRootState = StateFromReducersMapObject<typeof reducer>;

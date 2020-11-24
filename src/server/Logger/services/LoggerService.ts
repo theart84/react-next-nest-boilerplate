@@ -5,25 +5,25 @@ import * as StackTrace from 'stacktrace-js';
 import stringifySafe from 'json-stringify-safe';
 import moment from 'moment';
 
-import { LoggerChannelEnum } from '@server/Logger/enums/LoggerChannelEnum';
+import { LoggerChannel } from '@server/Logger/enums/LoggerChannel';
 import { ILoggerOptions } from '@server/Logger/interfaces/ILoggerOptions';
-import { LoggerLevelEnum } from '@server/Logger/enums/LoggerLevelEnum';
+import { LoggerLevel } from '@server/Logger/enums/LoggerLevel';
 import { ILoggerContext } from '@server/Logger/interfaces/ILoggerContext';
 
 @Injectable()
 export class LoggerService {
-  private defaultChannel = LoggerChannelEnum.APPLICATION;
+  private defaultChannel = LoggerChannel.APPLICATION;
 
   public constructor(
     @Inject(WINSTON_MODULE_PROVIDER)
     private readonly logger: Logger,
   ) {}
 
-  public getDefaultChannel(): LoggerChannelEnum {
+  public getDefaultChannel(): LoggerChannel {
     return this.defaultChannel;
   }
 
-  public setDefaultChannel(channel: LoggerChannelEnum): this {
+  public setDefaultChannel(channel: LoggerChannel): this {
     this.defaultChannel = channel;
 
     return this;
@@ -32,14 +32,14 @@ export class LoggerService {
   public async debug(message: string, options?: ILoggerOptions): Promise<void> {
     await this.log(message, {
       ...options,
-      level: LoggerLevelEnum.DEBUG,
+      level: LoggerLevel.DEBUG,
     });
   }
 
   public async info(message: string, options?: ILoggerOptions): Promise<void> {
     await this.log(message, {
       ...options,
-      level: LoggerLevelEnum.INFO,
+      level: LoggerLevel.INFO,
     });
   }
 
@@ -49,7 +49,7 @@ export class LoggerService {
   ): Promise<void> {
     await this.log(message, {
       ...options,
-      level: LoggerLevelEnum.NOTICE,
+      level: LoggerLevel.NOTICE,
     });
   }
 
@@ -59,7 +59,7 @@ export class LoggerService {
   ): Promise<void> {
     await this.log(message, {
       ...options,
-      level: LoggerLevelEnum.WARNING,
+      level: LoggerLevel.WARNING,
     });
   }
 
@@ -67,7 +67,7 @@ export class LoggerService {
     await this.log(message, {
       isWithStackTrace: true,
       ...options,
-      level: LoggerLevelEnum.ERROR,
+      level: LoggerLevel.ERROR,
     });
   }
 
@@ -78,7 +78,7 @@ export class LoggerService {
     await this.log(message, {
       isWithStackTrace: true,
       ...options,
-      level: LoggerLevelEnum.CRITICAL,
+      level: LoggerLevel.CRITICAL,
     });
   }
 
@@ -86,7 +86,7 @@ export class LoggerService {
     await this.log(message, {
       isWithStackTrace: true,
       ...options,
-      level: LoggerLevelEnum.ALERT,
+      level: LoggerLevel.ALERT,
     });
   }
 
@@ -97,14 +97,14 @@ export class LoggerService {
     await this.log(message, {
       isWithStackTrace: true,
       ...options,
-      level: LoggerLevelEnum.EMERGENCY,
+      level: LoggerLevel.EMERGENCY,
     });
   }
 
   private async log(message: string, options?: ILoggerOptions): Promise<void> {
     const { isWithStackTrace = false, level, channel, extra } = {
       ...options,
-      level: options?.level || LoggerLevelEnum.INFO,
+      level: options?.level || LoggerLevel.INFO,
       channel: options?.channel || this.getDefaultChannel(),
       extra: options?.extra,
     };

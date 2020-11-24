@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 
-import { Page } from '@server/Page/decorators/Page';
-import { Pages } from '@common/enums/Pages';
+import { PageGet } from '@server/Page/decorators/PageGet';
+import { Page } from '@common/enums/Page';
 
 @Controller()
 export class IndexController {
-  @Page(Pages.INDEX)
+  @PageGet(Page.INDEX)
   public get(): void {}
 }

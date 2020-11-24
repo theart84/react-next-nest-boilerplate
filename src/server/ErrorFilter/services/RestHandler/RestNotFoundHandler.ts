@@ -6,7 +6,7 @@ import { IRestHandler } from '@server/ErrorFilter/interfaces/IRestHandler';
 import { LoggerNotFoundHandler } from '@server/ErrorFilter/services/LoggerHandler/LoggerNotFoundHandler';
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
-import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { ErrorCode } from '@common/enums/ErrorCode';
 
 @Injectable()
 export class RestNotFoundHandler implements IRestHandler {
@@ -21,11 +21,11 @@ export class RestNotFoundHandler implements IRestHandler {
 
     const dto = this.errorDtoFactory.create(
       err,
-      ErrorCodes.ROUTE_NOT_FOUND,
+      ErrorCode.ROUTE_NOT_FOUND,
       'Not found',
     );
 
-    res.status(this.statusCodeResolver.resolve(ErrorCodes.ROUTE_NOT_FOUND));
+    res.status(this.statusCodeResolver.resolve(ErrorCode.ROUTE_NOT_FOUND));
     res.setHeader('Content-Type', 'application/json');
     res.send(stringify(dto.normalize()));
   }

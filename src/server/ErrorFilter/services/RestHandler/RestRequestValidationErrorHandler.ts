@@ -6,7 +6,7 @@ import { LoggerRequestValidationErrorHandler } from '@server/ErrorFilter/service
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
 import { IRestHandler } from '@server/ErrorFilter/interfaces/IRestHandler';
-import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { ErrorCode } from '@common/enums/ErrorCode';
 import { SystemValidationError } from '@server/SystemValidationError/dto/SystemValidationError';
 
 @Injectable()
@@ -25,14 +25,14 @@ export class RestRequestValidationErrorHandler implements IRestHandler {
 
     const dto = this.errorDtoFactory.create(
       err,
-      ErrorCodes.REST_VALIDATION_ERROR,
+      ErrorCode.REST_VALIDATION_ERROR,
       'Validation error',
       err.getErrors(),
     );
 
     res.status(
       this.systemErrorStatusCodeResolver.resolve(
-        ErrorCodes.REST_VALIDATION_ERROR,
+        ErrorCode.REST_VALIDATION_ERROR,
       ),
     );
     res.setHeader('Content-Type', 'application/json');

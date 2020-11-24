@@ -3,9 +3,9 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { CONFIGURATION_SERVICE_TOKEN } from '@nestjs/config/dist/config.constants';
 
-import { ConfigNames } from '@common/enums/ConfigNames';
+import { ConfigName } from '@common/enums/ConfigName';
 import { SystemErrorFactory } from '@server/SystemError/factories/SystemErrorFactory';
-import { ErrorCodes } from '@common/enums/ErrorCodes';
+import { ErrorCode } from '@common/enums/ErrorCode';
 
 @Injectable()
 export class ConfigService {
@@ -15,15 +15,15 @@ export class ConfigService {
     private readonly systemErrorFactory: SystemErrorFactory,
   ) {}
 
-  public get<ConfigName extends ConfigNames>(
-    name: ConfigName,
-  ): NodeJS.ProcessEnv[ConfigName] {
+  public get<ConfigItem extends ConfigName>(
+    name: ConfigItem,
+  ): NodeJS.ProcessEnv[ConfigItem] {
     const configParam = this.nestConfigService.get<
-      NodeJS.ProcessEnv[ConfigName]
+      NodeJS.ProcessEnv[ConfigItem]
     >(name);
 
     if (!configParam) {
-      throw this.systemErrorFactory.create(ErrorCodes.CONFIG_PARAM_NOT_FOUND);
+      throw this.systemErrorFactory.create(ErrorCode.CONFIG_PARAM_NOT_FOUND);
     }
 
     return configParam;
