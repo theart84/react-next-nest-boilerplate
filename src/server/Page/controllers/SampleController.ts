@@ -4,14 +4,17 @@ import { ISampleResponse } from '@common/api/dto/Page/ISampleResponse';
 import { PageGet } from '@server/Page/decorators/PageGet';
 import { ISampleTestResponse } from '@common/api/dto/Page/ISampleTestResponse';
 import { Page } from '@common/enums/Page';
+import { AboutFetcher } from '@server/About/services/AboutFetcher';
 
 @Controller()
 export class SampleController {
+  public constructor(private readonly aboutFetcher: AboutFetcher) {}
+
   @PageGet(Page.SAMPLE)
   public index(): ISampleResponse {
     return {
       features: {
-        about: { name: 'Name from backend', surname: 'Surname from backend' },
+        about: this.aboutFetcher.getAbout(),
         main: { title: 'Title from backend' },
       },
     };
@@ -21,7 +24,7 @@ export class SampleController {
   public test(): ISampleTestResponse {
     return {
       features: {
-        about: { name: 'Hello from backend', surname: 'Hello!' },
+        about: this.aboutFetcher.getAbout(),
       },
       page: {
         title: 'Sample test page',
