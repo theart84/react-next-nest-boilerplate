@@ -4,7 +4,7 @@ import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 
 import { DevGuard } from '@common/guards/DevGuard';
 
-@Controller('/dev/storybook')
+@Controller('/storybook/')
 @UseGuards(DevGuard)
 export class StorybookController {
   @Get()
