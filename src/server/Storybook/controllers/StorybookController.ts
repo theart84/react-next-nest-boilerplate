@@ -1,11 +1,8 @@
 import { Response } from 'express';
 import path from 'path';
-import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
-
-import { DevGuard } from '@common/guards/DevGuard';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 
 @Controller('/storybook/')
-@UseGuards(DevGuard)
 export class StorybookController {
   @Get()
   public get(@Res() response: Response): void {
