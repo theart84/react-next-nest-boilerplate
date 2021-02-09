@@ -2,28 +2,11 @@ import { NextPage } from 'next';
 
 import { Page } from '@common/enums/Page';
 import { IPageResponse } from '@common/api/types/IPageResponse';
-import { INextPageContext } from '@common/types/INextPageContext';
-import { IPageApiServicesInstance } from '@common/api/utils/getPageApiService';
-import { IBasePageResponse } from '@common/types/IBasePageResponse';
+import { Feature } from '@common/enums/Feature';
 
-export type IBaseNextPage<
-  PageName extends Page = Page,
-  CustomComponentParams extends Record<string, unknown> | undefined = undefined
-> = NextPage<
-  IPageResponse[PageName] extends IBasePageResponse
-    ? IPageResponse[PageName]['page']
-    : CustomComponentParams
+export type IBaseNextPage<PageName extends Page = Page> = NextPage<
+  IPageResponse[PageName]['page']
 > & {
-  init?(
-    context: INextPageContext<
-      IPageResponse[PageName],
-      IPageApiServicesInstance[PageName]
-    >,
-  ): Promise<
-    CustomComponentParams extends Record<string, unknown>
-      ? CustomComponentParams
-      : IPageResponse[PageName]['page'] extends undefined
-      ? void
-      : IPageResponse[PageName]['page']
-  > | void;
+  features?: Feature[];
+  page: Page;
 };

@@ -41,6 +41,9 @@
       ],
       "@components/*": [
         "src/components/*"
+      ],
+      "@e2e/*": [
+        "src/__e2e__/*"
       ]
     },
     "allowJs": true,

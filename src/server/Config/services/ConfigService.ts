@@ -1,31 +1,35 @@
-import { ConfigService as NestConfigService } from '@nestjs/config';
-import { Inject, Injectable } from '@nestjs/common';
-
-import { CONFIGURATION_SERVICE_TOKEN } from '@nestjs/config/dist/config.constants';
+import { Injectable } from '@nestjs/common';
 
 import { ConfigName } from '@common/enums/ConfigName';
 import { SystemErrorFactory } from '@server/SystemError/factories/SystemErrorFactory';
 import { ErrorCode } from '@common/enums/ErrorCode';
+import { NodeEnv } from '@common/enums/NodeEnv';
 
 @Injectable()
 export class ConfigService {
-  public constructor(
-    @Inject(CONFIGURATION_SERVICE_TOKEN)
-    private readonly nestConfigService: NestConfigService,
-    private readonly systemErrorFactory: SystemErrorFactory,
-  ) {}
+  public constructor(private readonly systemErrorFactory: SystemErrorFactory) {}
 
   public get<ConfigItem extends ConfigName>(
     name: ConfigItem,
   ): NodeJS.ProcessEnv[ConfigItem] {
-    const configParam = this.nestConfigService.get<
-      NodeJS.ProcessEnv[ConfigItem]
-    >(name);
+    const configParam = process.env[name];
 
     if (!configParam) {
       throw this.systemErrorFactory.create(ErrorCode.CONFIG_PARAM_NOT_FOUND);
     }
 
     return configParam;
+  }
+
+  public getIsDev(): boolean {
+    return this.get(ConfigName.NODE_ENV) === NodeEnv.DEVELOPMENT;
+  }
+
+  public getIsProd(): boolean {
+    return this.get(ConfigName.NODE_ENV) === NodeEnv.PRODUCTION;
+  }
+
+  public getIsDisableConsoleLogger(): boolean {
+    return this.get(ConfigName.DISABLE_CONSOLE_LOGGER) === '1';
   }
 }

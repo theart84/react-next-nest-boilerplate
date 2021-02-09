@@ -1,8 +1,46 @@
 {
-  "presets": ["next/babel"],
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "bugfixes": true
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "babel-plugin-transform-typescript-metadata",
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ],
   "env": {
     "development": {
-      "plugins": ["@babel/plugin-transform-react-display-name"]
+      "plugins": [
+        "@babel/plugin-transform-react-display-name"
+      ]
+    },
+    "production": {
+      "plugins": [
+        [
+          "react-remove-properties",
+          {
+            "properties": [
+              "data-testid"
+            ]
+          }
+        ]
+      ]
     }
   }
 }

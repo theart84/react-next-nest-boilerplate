@@ -5,7 +5,6 @@ import Axios, {
   AxiosRequestConfig,
   AxiosResponse,
 } from 'axios';
-
 import { AnyObject } from 'immer/dist/types/types-internal';
 
 import { ApiResponse, IData } from '@common/api/ApiResponse';
@@ -14,15 +13,18 @@ import {
   ApiErrorNext,
   apiErrorNext,
 } from '@common/api/services/ErrorNext/ApiErrorNext';
+import { APP_PUBLIC_URL } from '@common/utils/constants';
 
 export abstract class ApiServiceBase {
   private readonly axios: AxiosInstance;
 
   private readonly apiErrorNext: ApiErrorNext;
 
+  private readonly baseUrl = APP_PUBLIC_URL;
+
   protected constructor() {
     this.axios = Axios.create({
-      baseURL: '/',
+      baseURL: this.baseUrl,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
       },

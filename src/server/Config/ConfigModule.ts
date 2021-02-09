@@ -1,11 +1,9 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import { Global, Module } from '@nestjs/common';
 
 import { ConfigService } from '@server/Config/services/ConfigService';
-import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
 
+@Global()
 @Module({
-  imports: [NestConfigModule, SystemErrorModule],
   providers: [ConfigService],
   exports: [ConfigService],
 })

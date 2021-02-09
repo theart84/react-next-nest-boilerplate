@@ -16,6 +16,12 @@ const reducer = {
   [Feature.INFO]: infoSlice.reducer,
 };
 
+export const setStates = {
+  [Feature.MAIN]: mainSlice.actions.setState,
+  [Feature.ABOUT]: aboutSlice.actions.setState,
+  [Feature.INFO]: infoSlice.actions.setState,
+};
+
 export type IRootState = StateFromReducersMapObject<typeof reducer>;
 
 const middleware = getDefaultMiddleware({ thunk: true });

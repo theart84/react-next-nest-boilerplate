@@ -1,16 +1,15 @@
 import { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { EnhancedStore } from '@reduxjs/toolkit';
+import Head from 'next/head';
 
 import { withReduxStore } from '@common/redux/hocs/withReduxStore';
-import { IRootState } from '@common/redux/store';
+import { IRootState, setStates } from '@common/redux/store';
 import { INextPageContext } from '@common/types/INextPageContext';
 import { Layout } from '@components/Layout/Layout';
-import { getPageApiService } from '@common/api/utils/getPageApiService';
-import { Page } from '@common/enums/Page';
 import { IBaseNextPage } from '@common/types/IBaseNextPage';
-import { ApiPageBase } from '@common/api/ApiPageBase';
-import { apiErrorNext } from '@common/api/services/ErrorNext/ApiErrorNext';
+import { IS_SERVER } from '@common/utils/constants';
+import { apiPage } from '@common/api/services/ApiPage';
 
 export const App = ({
   Component,
@@ -18,42 +17,39 @@ export const App = ({
   reduxStore,
 }: AppProps & { reduxStore: EnhancedStore<IRootState> }): JSX.Element => (
   <Provider store={reduxStore}>
+    <Head>
+      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+      <title>{pageProps?.title}</title>
+    </Head>
     <Layout>
       <Component {...pageProps} />
     </Layout>
   </Provider>
 );
 
-App.getInitialProps = async <
-  Response extends Record<keyof unknown, unknown>,
-  ApiPageService extends ApiPageBase
->({
+App.getInitialProps = async ({
   Component,
   ctx,
 }: AppContext & {
   Component: IBaseNextPage;
-  ctx: Omit<
-    INextPageContext<Response, ApiPageService>,
-    'isServer' | 'apiService'
-  >;
+  ctx: INextPageContext;
 }): Promise<AppInitialProps> => {
-  let pageProperties: unknown = {};
+  const payload = IS_SERVER
+    ? ctx.query
+    : (await apiPage.init(Component.page)).payload;
 
-  if (Component.init) {
-    const pageName = ctx.pathname.replace('/views/', '');
+  if (Component.features) {
+    Component.features.forEach((feature) => {
+      const setState = setStates[feature];
 
-    const apiService = getPageApiService(pageName as Page);
+      const state = payload.features[feature];
 
-    pageProperties = await Component.init({
-      ...ctx,
-      isServer: !!ctx.req,
-      apiService,
-      errorApiService: apiErrorNext,
+      ctx.store.dispatch(setState(state));
     });
   }
 
   return {
-    pageProps: pageProperties,
+    pageProps: payload.page,
   };
 };
 

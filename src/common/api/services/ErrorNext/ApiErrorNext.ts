@@ -3,6 +3,7 @@ import Axios, { AxiosInstance } from 'axios';
 import { ErrorNextBody } from '@common/api/dto/ErrorNext/ErrorNextBody';
 import { ErrorNextRoute } from '@server/ErrorNext/enums/ErrorNextRoute';
 import { ErrorNextItem } from '@common/api/dto/ErrorNext/ErrorNextItem';
+import { APP_PUBLIC_URL } from '@common/utils/constants';
 
 const ERROR_SENDING_TIMEOUT = 1_000;
 
@@ -11,9 +12,11 @@ export class ApiErrorNext {
 
   private errors: ErrorNextItem[] = [];
 
+  private readonly baseUrl = APP_PUBLIC_URL;
+
   public constructor() {
     this.axios = Axios.create({
-      baseURL: `${process.env.HTTP_SCHEME}://${process.env.HTTP_HOST}:${process.env.NEST_SERVER_PORT}/`,
+      baseURL: this.baseUrl,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
       },

@@ -1,31 +1,29 @@
-const createPageFile = (name) => `import { IBaseNextPage } from '@common/pages/types/IBaseNextPage';
-import { Pages } from '@common/enums/Pages';
+const createPageFile = (name) => `import { IBaseNextPage } from '@common/types/IBaseNextPage';
+import { Page } from '@common/enums/Page';
 
-const ${name}Page: IBaseNextPage<Pages.${name.toUpperCase()}> = () => (
+const ${name}Page: IBaseNextPage<Page.${name.toUpperCase()}> = () => (
   <>${name} page</>
 );
 
-${name}Page.init = async ({ store, query, apiService, isServer }) => {
-  const payload = isServer ? query : (await apiService.index()).payload;
-};
+${name}Page.page = Page.${name.toUpperCase()};
 
 export { ${name}Page as default };
 `;
 
-const createDtoFile = (name) => `import { IBasePageResponse } from '@common/pages/types/IBasePageResponse';
+const createDtoFile = (name) => `import { IBasePageResponse } from '@common/api/types/IBasePageResponse';
 
 export type I${name}Response = IBasePageResponse;
 `;
 
 const addToPageResponse = (name, file) => file.toString().replace(/(export interface IPageResponse (.*\n)*)(})/,
-  `$1  [Pages.${name.toUpperCase()}]: I${name}Response;
+  `$1  [Page.${name.toUpperCase()}]: I${name}Response;
 }`).replace(/(import .*\n)\n/,
-  `$1import { I${name}Response } from '@common/dto/pages/I${name}Response';\n\n`);
+  `$1import { I${name}Response } from '@common/api/dto/Page/I${name}Response';\n\n`);
 
 const createApiServiceFile = (name) => `import { ApiResponse } from '@common/api/ApiResponse';
 import { ApiPageBase } from '@common/api/ApiPageBase';
-import { Pages } from '@common/enums/Pages';
-import { I${name}Response } from '@common/dto/pages/I${name}Response';
+import { Page } from '@common/enums/Page';
+import { I${name}Response } from '@common/api/dto/Page/I${name}Response';
 
 export class Api${name}Page extends ApiPageBase {
   public constructor() {
@@ -33,21 +31,21 @@ export class Api${name}Page extends ApiPageBase {
   }
 
   public index(): Promise<ApiResponse<I${name}Response>> {
-    return this.get<I${name}Response>(this.getRoute(Pages.${name.toUpperCase()}));
+    return this.get<I${name}Response>(this.getRoute(Page.${name.toUpperCase()}));
   }
 }
 `;
 
 const addToApiServiceList = (name, file) => file.toString().replace(/(import .*\n)\n/,
-  `$1import { Api${name}Page } from '@common/api/pages/Api${name}Page';\n\n`)
+  `$1import { Api${name}Page } from '@common/api/services/Page/Api${name}Page';\n\n`)
   .replace(/(const pagesApiServices(.*\n)*)(};)/,
-    `$1  [Pages.${name.toUpperCase()}]: Api${name}Page,
-};`).replace(/(export interface IPageApiServicesInstance(.*\n)*)(})/,
-    `$1  [Pages.${name.toUpperCase()}]: Api${name}Page;
-}`);
+    `$1  [Page.${name.toUpperCase()}]: new Api${name}Page(),
+};`).replace(/(export interface IPageApiServicesInstance(.*\n)*)(})\n/,
+    `$1  [Page.${name.toUpperCase()}]: Api${name}Page;
+}\n`);
 
 const addToRoutesList = (name, file) => file.toString().replace(/(const pagesRoutes(.*\n)*)(};)/,
-    `$1  [Pages.${name.toUpperCase()}]: {
+    `$1  [Page.${name.toUpperCase()}]: {
     route: '/${name.toLowerCase()}',
   },
 };`);
@@ -59,21 +57,26 @@ const addPageToEnum = (name, file) => file.toString().replace(/,\n}/, `,
 
 const createNestControllerFile = (name) => `import { Controller } from '@nestjs/common';
 
-import { Page } from '@server/page/decorators/Page';
-import { Pages } from '@common/enums/Pages';
-import { I${name}Response } from '@common/dto/pages/I${name}Response';
+import { PageGet } from '@server/Page/decorators/PageGet';
+import { Page } from '@common/enums/Page';
+import { I${name}Response } from '@common/api/dto/Page/I${name}Response';
 
 @Controller()
 export class ${name}Controller {
-  @Page(Pages.${name.toUpperCase()})
+  @PageGet(Page.${name.toUpperCase()})
   public index(): I${name}Response {
-    return {};
+    return {
+      page: {
+        title: 'Hello world from ${name} page',
+      },
+      features: {},
+    };
   }
 }
 `;
 
 const addToNestModuleList = (name, file) => file.toString().replace(/(import .*\n)\n/,
-  `$1import { ${name}Controller } from '@server/page/${name}Controller';\n\n`)
+  `$1import { ${name}Controller } from '@server/Page/controllers/${name}Controller';\n\n`)
   .replace(/(controllers: \[(.*\n)*.*)(],)/,
     `$1, ${name}Controller],`);
 

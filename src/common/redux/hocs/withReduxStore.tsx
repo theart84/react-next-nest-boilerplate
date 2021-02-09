@@ -5,14 +5,12 @@ import { AppContext, AppInitialProps, AppProps } from 'next/app';
 
 import { initializeStore, IRootState } from '@common/redux/store';
 import { INextPageContext } from '@common/types/INextPageContext';
-import { ApiPageBase } from '@common/api/ApiPageBase';
-
-const isServer = typeof window === 'undefined';
+import { IS_SERVER } from '@common/utils/constants';
 
 const getOrCreateStore = (
   initialState?: IRootState,
 ): EnhancedStore<IRootState> => {
-  if (isServer) {
+  if (IS_SERVER) {
     return initializeStore(initialState);
   }
 
@@ -41,21 +39,12 @@ export const withReduxStore = (
     return <App {...properties} reduxStore={reduxStore} />;
   };
 
-  WithRedux.getInitialProps = async <
-    Response extends Record<keyof unknown, unknown>,
-    ApiPageService extends ApiPageBase
-  >(
-    context: AppContext,
-  ) => {
+  WithRedux.getInitialProps = async (context: AppContext) => {
     const store = getOrCreateStore();
 
-    (context.ctx as INextPageContext<Response, ApiPageService>).store = store;
+    (context.ctx as INextPageContext).store = store;
 
-    let appProperties = {};
-
-    if (typeof App.getInitialProps === 'function') {
-      appProperties = await App.getInitialProps(context);
-    }
+    const appProperties = await App.getInitialProps(context);
 
     return {
       ...appProperties,

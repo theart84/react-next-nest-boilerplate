@@ -1,14 +1,15 @@
 /* eslint import/order: off, import/first: off */
-import { config } from 'dotenv';
+import { load } from 'dotenv-extended';
 import path from 'path';
 
-config({
-  path: path.resolve(__dirname, '../../.env'),
+load({
+  path: path.resolve(process.cwd(), '.env.local'),
+  defaults: path.resolve(process.cwd(), '.env'),
 });
 
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
 import { RenderFilter } from 'nest-next';
+import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from '@server/AppModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
@@ -18,13 +19,26 @@ import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
 import { ErrorFilter } from '@server/ErrorFilter/services/ErrorFilter';
 import { SystemValidationErrorModule } from '@server/SystemValidationError/SystemValidationErrorModule';
 import { SystemValidationErrorFactory } from '@server/SystemValidationError/factories/SystemValidationErrorFactory';
+import {
+  APP_PUBLIC_URL,
+  APP_TEST_REACT_TESTING_LIBRARY_URL,
+} from '@common/utils/constants';
 
 (async (): Promise<void> => {
   const app = await NestFactory.create(AppModule);
 
-  const errorFilter = app.select(ErrorFilterModule).get(ErrorFilter);
-
   const configService = app.select(ConfigModule).get(ConfigService);
+
+  const origin = configService.getIsDev()
+    ? [APP_PUBLIC_URL, APP_TEST_REACT_TESTING_LIBRARY_URL]
+    : APP_PUBLIC_URL;
+
+  app.enableCors({
+    origin,
+    credentials: true,
+  });
+
+  const errorFilter = app.select(ErrorFilterModule).get(ErrorFilter);
 
   const renderFilter = app.get(RenderFilter);
 
@@ -50,7 +64,7 @@ import { SystemValidationErrorFactory } from '@server/SystemValidationError/fact
 
   app.useGlobalFilters(errorFilter);
 
-  const appPort = configService.get(ConfigName.NEST_SERVER_PORT);
+  const appPort = configService.get(ConfigName.LOCAL_NEST_SERVER_PORT);
 
   await app.listen(appPort);
 })();

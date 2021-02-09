@@ -166,16 +166,20 @@
         ]
       }
     ],
-    "no-void": ["error", { "allowAsStatement": true }]
+    "no-void": ["error", { "allowAsStatement": true }],
+    "jsx-a11y/label-has-associated-control": "off",
+    "quotes": ["error", "single"]
   },
   "overrides": [{
     "env": {
       "jest": true
     },
-    "files": ["*.test.tsx"],
+    "files": ["*.test.tsx", "src/__e2e__/**/*.*"],
     "rules": {
       "@typescript-eslint/no-unsafe-call": ["off"],
-      "@typescript-eslint/no-unsafe-member-access": ["off"]
+      "@typescript-eslint/no-unsafe-member-access": ["off"],
+      "import/no-extraneous-dependencies": ["off"],
+      "import/no-cycle": ["off"]
     }
   }]
 }

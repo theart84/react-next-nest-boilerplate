@@ -3,7 +3,7 @@ import LinkBase from 'next/link';
 import { LinkProps } from 'next/dist/client/link';
 
 import { Page } from '@common/enums/Page';
-import { getPageRoute } from '@common/api/utils/getPageRoutes';
+import { getPageRoute } from '@common/utils/routing/getPageRoutes';
 
 export interface IProps extends LinkProps {
   href: Page;

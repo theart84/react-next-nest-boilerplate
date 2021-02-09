@@ -5,12 +5,12 @@ import {
   IWithFeatureState,
   withFeatureState,
 } from '@common/redux/hocs/withFeatureState';
-import { Features } from '@common/enums/Features';
+import { Feature } from '@common/enums/Feature';
 
-export const ${name}Component: FC<IWithFeatureState<Features.${name.toUpperCase()}>> = () => <></>;
+export const ${name}Component: FC<IWithFeatureState<Feature.${name.toUpperCase()}>> = () => <></>;
 
 export const ${name} = withFeatureState({
-  feature: Features.${name.toUpperCase()},
+  feature: Feature.${name.toUpperCase()},
   actions: ${name.toLowerCase()}Slice.actions,
 })(${name}Component);
 `;
@@ -18,13 +18,13 @@ export const ${name} = withFeatureState({
 const createSliceFile = (name) => `import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IBaseFeatureState } from '@common/redux/types/IBaseFeatureState';
-import { Features } from '@common/enums/Features';
-import { I${name} } from '@common/dto/features/I${name}';
+import { Feature } from '@common/enums/Feature';
+import { I${name} } from '@common/api/dto/${name}/I${name}';
 
 export type IState = IBaseFeatureState<I${name}>;
 
 export const ${name.toLowerCase()}Slice = createSlice({
-  name: Features.${name.toUpperCase()},
+  name: Feature.${name.toUpperCase()},
   initialState: {} as IState,
   reducers: {
     setState: (draft, action: PayloadAction<I${name}>) => {
@@ -37,9 +37,14 @@ export const ${name.toLowerCase()}Slice = createSlice({
 const createDtoFile = (name) => `export interface I${name} {}
 `;
 
-const addFeatureToStore = (name, file) => file.toString().replace(/(const reducer = {\n(.*\n)*)(};)/,
-  `$1  [Features.${name.toUpperCase()}]: ${name.toLowerCase()}Slice.reducer,
-};`).replace(/(import .*\n)\n/,
+const addFeatureToStore = (name, file) => file.toString()
+  .replace(/(const reducer = {\n(.*\n)*)(};)\n\nexport const/,
+  `$1  [Feature.${name.toUpperCase()}]: ${name.toLowerCase()}Slice.reducer,
+};\n\nexport const`)
+.replace(/(const reducer = {\n(.*\n)*)(};)/,
+  `$1  [Feature.${name.toUpperCase()}]: ${name.toLowerCase()}Slice.actions.setState,
+};`)
+  .replace(/(import .*\n)\n/,
   `$1import { ${name.toLowerCase()}Slice } from '@features/${name}/duck/slice';\n\n`);
 
 const addFeatureToEnum = (name, file) => file.toString().replace(/,\n}/, `,

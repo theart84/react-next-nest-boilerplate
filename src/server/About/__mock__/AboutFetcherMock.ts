@@ -7,7 +7,7 @@ import { AboutFetcher } from '@server/About/services/AboutFetcher';
 export class AboutFetcherMock implements AboutFetcher {
   public getAbout(): IAbout {
     return {
-      name: 'Mock name from backend',
+      name: 'Hello from selenium test',
       surname: 'Mock surname from backend',
     };
   }

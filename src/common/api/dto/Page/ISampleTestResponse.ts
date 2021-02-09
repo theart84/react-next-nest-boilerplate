@@ -1,16 +1,7 @@
 import { IAbout } from '@common/api/dto/About/IAbout';
 import { Feature } from '@common/enums/Feature';
-import { IBasePageResponse } from '@common/types/IBasePageResponse';
+import { IBasePageResponse } from '@common/api/types/IBasePageResponse';
 
-export interface ISampleTestFeaturesResponse {
+export type ISampleTestResponse = IBasePageResponse<{
   [Feature.ABOUT]: IAbout;
-}
-
-export interface ISampleTestPageResponse {
-  title: string;
-}
-
-export type ISampleTestResponse = IBasePageResponse<
-  ISampleTestFeaturesResponse,
-  ISampleTestPageResponse
->;
+}>;

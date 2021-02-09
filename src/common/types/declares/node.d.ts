@@ -6,10 +6,12 @@ declare global {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     interface ProcessEnv {
       [ConfigName.NODE_ENV]: NodeEnv;
-      [ConfigName.NEST_SERVER_PORT]: string;
+      [ConfigName.PUBLIC_NEST_SERVER_PORT]: string;
       [ConfigName.NEST_LOG_PATH]: string;
-      [ConfigName.HTTP_HOST]: string;
-      [ConfigName.HTTP_SCHEME]: string;
+      [ConfigName.PUBLIC_HTTP_HOST]: string;
+      [ConfigName.PUBLIC_HTTP_SCHEME]: string;
+      [ConfigName.DISABLE_CONSOLE_LOGGER]: '0' | '1';
+      [ConfigName.LOCAL_NEST_SERVER_PORT]: string;
     }
   }
 }

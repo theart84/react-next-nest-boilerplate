@@ -9,13 +9,14 @@ const rl = readline.createInterface({
 });
 
 rl.question('Введите название фичи: ', function(name) {
-  fs.mkdirSync(path.resolve(__dirname, `../src/features/${name}`));
-  fs.mkdirSync(path.resolve(__dirname, `../src/features/${name}/duck`));
-  fs.writeFileSync(path.resolve(__dirname, `../src/features/${name}/${name}.tsx`), createFeatureFile(name));
-  fs.writeFileSync(path.resolve(__dirname, `../src/features/${name}/duck/slice.ts`), createSliceFile(name));
-  fs.writeFileSync(path.resolve(__dirname, `../src/common/dto/features/I${name}.ts`), createDtoFile(name));
-  fs.writeFileSync(path.resolve(__dirname, '../src/common/enums/Features.ts'), addFeatureToEnum(name, fs.readFileSync(path.resolve(__dirname, '../src/common/enums/Features.ts')).toString()));
-  fs.writeFileSync(path.resolve(__dirname, '../src/common/redux/store.ts'), addFeatureToStore(name, fs.readFileSync(path.resolve(__dirname, '../src/common/redux/store.ts')).toString()));
+  fs.mkdirSync(path.resolve(process.cwd(), `src/features/${name}`));
+  fs.mkdirSync(path.resolve(process.cwd(), `src/features/${name}/duck`));
+  fs.mkdirSync(path.resolve(process.cwd(), `src/common/api/dto/${name}`));
+  fs.writeFileSync(path.resolve(process.cwd(), `src/features/${name}/${name}.tsx`), createFeatureFile(name));
+  fs.writeFileSync(path.resolve(process.cwd(), `src/features/${name}/duck/slice.ts`), createSliceFile(name));
+  fs.writeFileSync(path.resolve(process.cwd(), `src/common/api/dto/${name}/I${name}.ts`), createDtoFile(name));
+  fs.writeFileSync(path.resolve(process.cwd(), 'src/common/enums/Feature.ts'), addFeatureToEnum(name, fs.readFileSync(path.resolve(path.resolve(process.cwd(), 'src/common/enums/Feature.ts')).toString())));
+  fs.writeFileSync(path.resolve(process.cwd(), 'src/common/redux/store.ts'), addFeatureToStore(name, fs.readFileSync(path.resolve(path.resolve(process.cwd(), 'src/common/redux/store.ts')).toString())));
 
   console.log('Фича успешно создана');
 

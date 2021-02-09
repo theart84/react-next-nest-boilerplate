@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
   }
-  
+
   #app {
     height: 100%;
   }

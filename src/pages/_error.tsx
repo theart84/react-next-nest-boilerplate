@@ -1,15 +1,18 @@
-import { IBaseNextPage } from '@common/types/IBaseNextPage';
+import { NextPage } from 'next';
+
 import { ErrorNextItem } from '@common/api/dto/ErrorNext/ErrorNextItem';
+import { apiErrorNext } from '@common/api/services/ErrorNext/ApiErrorNext';
 
-const Error: IBaseNextPage = () => <>Error</>;
+const Error: NextPage = () => <>Error</>;
 
-Error.init = ({ err, errorApiService }) => {
+// eslint-disable-next-line @typescript-eslint/require-await
+Error.getInitialProps = async ({ err }) => {
   const errorRequest: ErrorNextItem = err || {
     name: 'Unknown error',
     message: '',
   };
 
-  errorApiService.sendError(errorRequest);
+  apiErrorNext.sendError(errorRequest);
 };
 
 export { Error as default };

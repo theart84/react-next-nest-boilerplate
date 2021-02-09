@@ -1,27 +1,16 @@
-import Head from 'next/head';
-
 import { About } from '@features/About/About';
-import { aboutSlice } from '@features/About/duck/slice';
 import { IBaseNextPage } from '@common/types/IBaseNextPage';
 import { Page } from '@common/enums/Page';
+import { Feature } from '@common/enums/Feature';
 
-export const Test: IBaseNextPage<Page.SAMPLE_TEST> = ({ title }) => (
+export const SampleTestPage: IBaseNextPage<Page.SAMPLE_TEST> = () => (
   <div>
-    <Head>
-      <title>{title}</title>
-    </Head>
     <About />
   </div>
 );
 
-Test.init = async ({ store, query, isServer, apiService }) => {
-  const payload = isServer ? query : (await apiService.test()).payload;
+SampleTestPage.page = Page.SAMPLE_TEST;
 
-  store.dispatch(aboutSlice.actions.setState(payload.features.about));
+SampleTestPage.features = [Feature.ABOUT];
 
-  return {
-    title: payload.page.title,
-  };
-};
-
-export { Test as default };
+export { SampleTestPage as default };

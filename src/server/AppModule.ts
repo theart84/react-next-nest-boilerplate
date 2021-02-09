@@ -4,19 +4,15 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { RenderModule } from 'nest-next';
 import Next from 'next';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import * as Transport from 'winston-transport';
 import { format, transports } from 'winston';
 import { WinstonModule } from 'nest-winston';
-import path from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { PageModule } from '@server/Page/PageModule';
 import { ConfigModule } from '@server/Config/ConfigModule';
-import { NodeEnv } from '@common/enums/NodeEnv';
 import { ConfigService } from '@server/Config/services/ConfigService';
 import { ConfigName } from '@common/enums/ConfigName';
 import { LoggerMiddleware } from '@server/Logger/middlewares/LoggerMiddleware';
@@ -24,13 +20,16 @@ import { ErrorFilterModule } from '@server/ErrorFilter/ErrorFilterModule';
 import { LoggerModule } from '@server/Logger/LoggerModule';
 import { SystemValidationErrorModule } from '@server/SystemValidationError/SystemValidationErrorModule';
 import { ErrorNextModule } from '@server/ErrorNext/ErrorNextModule';
+import { TestReportModule } from '@server/TestReport/TestReportModule';
+import { StorybookModule } from '@server/Storybook/StorybookModule';
+import { SystemErrorModule } from '@server/SystemError/SystemErrorModule';
 
 @Module({
   imports: [
     RenderModule.forRootAsync(
       Next({
         dev: process.env.NODE_ENV !== 'production',
-        dir: path.resolve(__dirname, '../..'),
+        dir: process.cwd(),
       }),
     ),
     WinstonModule.forRootAsync({
@@ -47,7 +46,7 @@ import { ErrorNextModule } from '@server/ErrorNext/ErrorNextModule';
           }),
         ];
 
-        if (configService.get(ConfigName.NODE_ENV) === NodeEnv.DEVELOPMENT) {
+        if (!configService.getIsDisableConsoleLogger()) {
           loggerTransports.push(new transports.Console());
         }
 
@@ -57,19 +56,15 @@ import { ErrorNextModule } from '@server/ErrorNext/ErrorNextModule';
         };
       },
     }),
-    NestConfigModule.forRoot({
-      envFilePath: path.resolve(__dirname, '../../.env'),
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, '../..', 'storybook-static'),
-      serveRoot: '/storybook',
-    }),
     PageModule,
     ConfigModule,
     ErrorFilterModule,
     LoggerModule,
     SystemValidationErrorModule,
     ErrorNextModule,
+    TestReportModule,
+    StorybookModule,
+    SystemErrorModule,
   ],
 })
 export class AppModule implements NestModule {

@@ -1,14 +1,17 @@
 import { connect, InferableComponentEnhancer } from 'react-redux';
-import { Dispatch } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 
 import { IRootState } from '@common/redux/store';
 import { getFeatureStateSelector } from '@common/redux/selectors/getFeatureStateSelector';
 import { Feature } from '@common/enums/Feature';
 import { IFeatureState } from '@common/redux/types/IFeatureState';
-import { IBaseActions } from '@common/redux/types/IBaseActions';
 
 type IMapStateToProps = (state: IRootState) => Record<string, unknown>;
 type IMapDispatchToProps = (dispatch: Dispatch) => Record<string, unknown>;
+
+interface IBaseActions<FeatureName extends Feature> {
+  setState(state: IFeatureState<FeatureName>): AnyAction;
+}
 
 export type IWithFeatureState<
   FeatureName extends Feature,
@@ -16,10 +19,10 @@ export type IWithFeatureState<
   MapDispatchToProps extends IMapDispatchToProps | undefined = undefined
 > = (MapStateToProps extends IMapStateToProps
   ? ReturnType<MapStateToProps>
-  : Record<string, unknown>) &
+  : unknown) &
   (MapDispatchToProps extends IMapDispatchToProps
     ? ReturnType<MapDispatchToProps>
-    : Record<string, unknown>) & {
+    : unknown) & {
     state: IFeatureState<FeatureName>;
     setState(response: IFeatureState<FeatureName>): void;
   };
@@ -68,7 +71,7 @@ export const withFeatureState = <
 
   const mapDispatchToProperties = (
     dispatch: Dispatch,
-  ): { setState(response: IFeatureState<FeatureName>): void } => ({
+  ): IBaseActions<FeatureName> => ({
     setState: (response: IFeatureState<FeatureName>) =>
       dispatch(actions.setState(response)),
     ...(mapDispatchToProps ? mapDispatchToProps(dispatch) : undefined),

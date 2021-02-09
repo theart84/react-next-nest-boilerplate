@@ -30,11 +30,12 @@ module.exports = {
     /*
       Данный плагин заменяет вхождения process.env.NAME на константное значение
       в процессе сборки
-      Динамически получить доступ через process.env[key]) не получится
+      Динамически получить доступ через process.env[key] не получится
       Таким образом, в клиентский JS не попадают ненужные переменные окружения
      */
     config.plugins.push(new Dotenv({
-      path: path.resolve(__dirname, '.env'),
+      defaults: path.resolve(process.cwd(), '.env'),
+      path: path.resolve(process.cwd(), '.env.local'),
     }));
 
     return config;

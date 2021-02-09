@@ -12,10 +12,9 @@ import { RestSystemErrorHandler } from '@server/ErrorFilter/services/RestHandler
 import { ErrorFilter } from '@server/ErrorFilter/services/ErrorFilter';
 import { StatusCodeResolver } from '@server/ErrorFilter/services/StatusCodeResolver';
 import { ErrorDtoFactory } from '@server/ErrorFilter/factories/ErrorDtoFactory';
-import { ConfigModule } from '@server/Config/ConfigModule';
 
 @Module({
-  imports: [LoggerModule, ConfigModule],
+  imports: [LoggerModule],
   providers: [
     ErrorDtoFactory,
     LoggerDefaultHandler,

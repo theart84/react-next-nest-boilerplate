@@ -6,9 +6,9 @@ export const createStory = <Component extends FC<GetProps<Component>>>(
   OriginalComponent: Component,
   args?: GetProps<Component>,
 ): Story<PropsWithChildren<GetProps<Component>>> => {
-  const StoryComponent: Story<PropsWithChildren<
-    GetProps<Component>
-  >> = OriginalComponent.bind({}) as Story<
+  const StoryComponent: Story<
+    PropsWithChildren<GetProps<Component>>
+  > = OriginalComponent.bind({}) as Story<
     PropsWithChildren<GetProps<Component>>
   >;
 
